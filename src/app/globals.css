@@ -49,3 +49,18 @@
     --ring: 142.4 71.8% 29.2%;
   }
 }
+
+body{
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  overflow-y: auto;
+}
+*::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+}
+.flex-center{
+  @apply flex flex-row items-center 
+}

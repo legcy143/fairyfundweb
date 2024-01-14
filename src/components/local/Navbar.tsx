@@ -17,10 +17,12 @@ function Navbar() {
         <Button onClick={() => {
           setTheme("light")
         }}>light</Button>
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <Link href={"/profile"}>
+          <Avatar>
+            <AvatarImage src="" alt="" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+        </Link>
 
       </div>
     </div>

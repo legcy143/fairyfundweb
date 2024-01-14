@@ -1,10 +1,24 @@
+"use client"
+import { Button } from '@/components/ui/button'
+import { useGroup } from '@/store/useGroup'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Home() {
+  const { myGroups }: any = useGroup()
   return (
-   <main>
-    
-    hello
-   </main>
+    <main className='p-5'>
+      {myGroups?.map(e => {
+        console.log(e)
+        return (
+          <>
+            <Link href={`/groups/${e._id}`}>
+              <Button>groups</Button>
+            </Link> <br />
+          </>
+        )
+      })}
+      hello
+    </main>
   )
 }
