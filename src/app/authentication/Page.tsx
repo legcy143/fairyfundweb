@@ -23,7 +23,7 @@ import { useAuth } from '@/store/useAuth'
 
 export default function Authentication() {
 
-  const router = useRouter();
+  const router:any = useRouter();
   const { isLogged }: any = useAuth()
   useEffect(() => {
     if (isLogged) {
