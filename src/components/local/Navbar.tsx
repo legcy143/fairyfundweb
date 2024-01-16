@@ -8,12 +8,12 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/store/useAuth'
 
 function Navbar() {
-  const { isLogged }: any = useAuth();
+  const { isLogged , userDetail}: any = useAuth();
   const { setTheme } = useTheme()
   const router = useRouter()
   return (
     <div className='px-5 h-[5rem] flex flex-row items-center justify-between'>
-      <Link href={"/"}>Fairy funds 2.2</Link>
+      <Link href={"/"}>Fairy funds 2.3</Link>
       <div className='flex gap-5'>
         <Button onClick={() => {
           setTheme("dark")
@@ -25,7 +25,7 @@ function Navbar() {
           <Link href={"/profile"}>
             <Avatar>
               <AvatarImage src="" alt="" />
-              <AvatarFallback>PP</AvatarFallback>
+              <AvatarFallback className='uppercase'>{userDetail?.userName.slice(0,2)}</AvatarFallback>
             </Avatar>
           </Link>
           :
