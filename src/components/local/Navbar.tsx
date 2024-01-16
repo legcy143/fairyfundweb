@@ -4,9 +4,13 @@ import React from 'react'
 import { Button } from '../ui/button'
 import { useTheme } from 'next-themes'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/store/useAuth'
 
 function Navbar() {
+  const { isLogged }: any = useAuth();
   const { setTheme } = useTheme()
+  const router = useRouter()
   return (
     <div className='px-5 h-[5rem] flex flex-row items-center justify-between'>
       <Link href={"/"}>Fairy funds 2.2</Link>
@@ -17,12 +21,18 @@ function Navbar() {
         <Button onClick={() => {
           setTheme("light")
         }}>light</Button>
-        <Link href={"/profile"}>
-          <Avatar>
-            <AvatarImage src="" alt="" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-        </Link>
+        {isLogged ?
+          <Link href={"/profile"}>
+            <Avatar>
+              <AvatarImage src="" alt="" />
+              <AvatarFallback>PP</AvatarFallback>
+            </Avatar>
+          </Link>
+          :
+          <Button onClick={() => {
+            router.push("/authentication")
+          }}>authentication</Button>
+        }
 
       </div>
     </div>

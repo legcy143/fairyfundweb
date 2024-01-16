@@ -7,24 +7,37 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion"
 
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
 
-export default function Products({ items = [] }: any) {
+
+export default function Products({ itemsDetail = [] }: any) {
     return (
         <main className='md:p-5'>
             <h1>products</h1>
-            {items?.map((e: any) => <SingleAccordion key={e._id}
+            {itemsDetail?.map((e: any) => <SingleAccordion key={e._id}
                 date={new Date(e?.date).toLocaleString()}
                 addedBy={e.addedBy}
                 broughtBy={e.broughtBy}
                 title={e.title}
                 totalPrice={e.totalPrice}
+                item={e.item}
+                message={e?.message}
             />)}
         </main>
     )
 }
 
 
-const SingleAccordion = ({ addedBy, broughtBy, date, includedMembers, product, title, totalPrice }: any) => {
+const SingleAccordion = ({ addedBy, broughtBy, date, includedMembers, item = [], title, totalPrice, message }: any) => {
     return (
         <Accordion type="single" collapsible>
             <AccordionItem value="item-1">
@@ -45,8 +58,33 @@ const SingleAccordion = ({ addedBy, broughtBy, date, includedMembers, product, t
                     </div>
                 </AccordionTrigger>
                 <AccordionContent>
-                    {/* body content goes here */}
-                    hii
+                    <Table>
+                        <TableCaption>{message}</TableCaption>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[0.5rem]">s.no</TableHead>
+                                <TableHead>Item</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead className="text-right">Quantity</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {item.map((e: any, i: any) => (
+                                <TableRow key={i}>
+                                    <TableCell className="font-medium">{i + 1}</TableCell>
+                                    <TableCell>{e.name}</TableCell>
+                                    <TableCell>{e.quantity}</TableCell>
+                                    <TableCell className="text-right ">{e.price}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TableCell colSpan={3}>Total</TableCell>
+                                <TableCell className="text-right">${totalPrice}</TableCell>
+                            </TableRow>
+                        </TableFooter>
+                    </Table>
                 </AccordionContent>
             </AccordionItem>
         </Accordion>

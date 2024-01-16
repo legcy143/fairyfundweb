@@ -44,6 +44,25 @@ export const useGroup = create((set) => ({
             })
         }
     },
+    // admin actions
+    addNewItem: async (data: any) => {
+        try {
+            let res: any = await axios.get(`${API_URL}/group/additem`, { headers })
+            if (res.data.success) {
+                console.log("groups from fetching ", res)
+                set({
+                    myGroups: res.data.groups
+                })
+            }
+        } catch (e) {
+            console.log("fetch groups error ", e)
+        }
+        finally {
+            set({
+                isLoading: false
+            })
+        }
+    },
 
 
 
