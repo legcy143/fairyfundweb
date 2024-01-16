@@ -8,8 +8,7 @@ export default function Home() {
   const { myGroups }: any = useGroup()
   return (
     <main className='p-5'>
-      {myGroups?.map(e => {
-        console.log(e)
+      {myGroups?.map((e: any) => {
         return (
           <>
             <Link href={`/groups/${e._id}`}>
