@@ -8,7 +8,7 @@ if (typeof window !== 'undefined') {
     authToken = localStorage.getItem("authtoken")
 }
 
-const headers = {
+const headers:any = {
     authorization: authToken,
 };
 

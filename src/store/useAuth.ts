@@ -8,11 +8,11 @@ if (typeof window !== 'undefined') {
     authToken = localStorage.getItem("authtoken")
 }
 
-const headers = {
+const headers:any = {
     authorization: authToken,
 };
 
-export const useAuth = create((set) => ({
+export const useAuth = create((set:any) => ({
     isLoading: false,
     isLogged: false,
     userDetail: null,

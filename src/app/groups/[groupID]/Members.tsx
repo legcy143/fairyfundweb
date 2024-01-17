@@ -1,7 +1,7 @@
 import React from 'react'
 import { BiRupee } from "react-icons/bi";
 
-export default function Members({ members = [{ _id: '0', role:"", credit: 0 }] }) {
+export default function Members({ members = [{ _id: '0', role:"", credit: 0 }] }:any) {
   return (
     <div>
       {members?.map((e:any) => <Membercard key={e?._id} name={e?.memberID.userName} role={e.role} credit={e?.credit} />)}
@@ -12,7 +12,7 @@ export default function Members({ members = [{ _id: '0', role:"", credit: 0 }] }
   )
 }
 
-const Membercard = ({ name = "", role = "member", credit = -1 }) => {
+const Membercard = ({ name = "", role = "member", credit = -1 }:any) => {
   return (
     <div className='flex items-center justify-between p-3 border m-1 rounded border-border'>
       <p className='capitalize flex-1 truncate '>{name}{role == "admin" && " (admin)"}</p>

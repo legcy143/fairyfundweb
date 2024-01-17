@@ -4,7 +4,7 @@ import React from 'react'
 
 export default function Admin({ groupID = "" }: any) {
 
-    const router = useRouter()
+    const router:any = useRouter()
 
     const navigateArr = [
         { title: "Add Items", route: "/additem" },
@@ -13,7 +13,7 @@ export default function Admin({ groupID = "" }: any) {
     ]
     return (
         <div className='flex flex-wrap gap-5'>
-            {navigateArr?.map(e => <Button
+            {navigateArr?.map((e: any) => <Button
                 onClick={() => router.push(`${groupID}/${e.route}`)}
                 key={e.title}>
                 {e.title}

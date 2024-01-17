@@ -14,16 +14,21 @@ import Admin from './Admin';
 
 
 export default function page() {
-    const { groupID } = useParams();
+    const { groupID }:any = useParams();
     const { myGroups }: any = useGroup()
     const { isLogged, userDetail }: any = useAuth()
     const [groupDetail, setgroupDetail] = useState<any>({ _id: 0 })
-    const [groupLoading, setgroupLoading] = useState(true)
-    const [isAdmin, setIsAdmin] = useState(false)
-    const [myAmount, setmyAmount] = useState(0)
+    const [groupLoading, setgroupLoading] = useState<boolean>(true)
+    const [isAdmin, setIsAdmin] = useState<boolean>(false)
+    const [myAmount, setmyAmount] = useState<number>(0)
     useEffect(() => {
+        // validateing user validation 
         if (groupID.length > 20 && isLogged && myGroups) {
+
+            // filter group from grouops array
             let g = myGroups.filter((e: any) => e._id == groupID);
+
+            // set 
             setgroupDetail(g[0])
             g[0].users?.map((e: any) => {
                 if (e.memberID._id == userDetail._id) {
