@@ -22,7 +22,7 @@ import {
 export default function Products({ itemsDetail = [] }: any) {
     return (
         <main className='md:p-5'>
-            <h1>products</h1>
+            {/* <h1>products</h1> */}
             {itemsDetail?.map((e: any) => <SingleAccordion key={e._id}
                 date={new Date(e?.date).toLocaleString()}
                 addedBy={e.addedBy}
@@ -39,12 +39,12 @@ export default function Products({ itemsDetail = [] }: any) {
 
 const SingleAccordion = ({ addedBy, broughtBy, date, includedMembers, item = [], title, totalPrice, message }: any) => {
     return (
-        <Accordion type="single" collapsible>
+        <Accordion type="single" className='relative' collapsible>
             <AccordionItem value="item-1">
                 <AccordionTrigger >
                     {/* accoridan header content goes here */}
-                    <div className='w-[100%] '>
-                        <p className='w-fit py-1 opacity-80 font-normal text-sm'>{date}</p>
+                    <div className='w-[100%]'>
+                        <p className='w-fit py-1 opacity-80 font-normal text-sm relative'>{date}</p>
                         <div className='flex gap-1 w-[98%]'>
                             <MiniCard title='added by' name={addedBy} />
                             <MiniCard title='brought by' name={broughtBy} />

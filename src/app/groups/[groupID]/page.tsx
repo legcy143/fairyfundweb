@@ -90,8 +90,8 @@ export default function page() {
                 </div>
             </div>
 
-            <Tabs defaultValue={tabOptions[0].value}>
-                <TabsList className="w-[100%] overflow-auto h-fit justify-start">
+            <Tabs defaultValue={tabOptions[0].value} className='max-h-[70vh] overflow-auto'>
+                <TabsList className="w-[100%] overflow-auto h-fit justify-start sticky top-0 z-10">
                     {tabOptions?.map(e => <TabsTrigger
                         key={e.value}
                         value={e.value}>

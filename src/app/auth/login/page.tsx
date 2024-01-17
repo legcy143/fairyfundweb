@@ -23,7 +23,7 @@ import { useAuth } from '@/store/useAuth'
 
 export default function Authentication() {
 
-  const router:any = useRouter();
+  const router: any = useRouter();
   const { isLogged }: any = useAuth()
   useEffect(() => {
     if (isLogged) {
@@ -59,9 +59,11 @@ export default function Authentication() {
   }
 
   return (
-    <main className='p-2 py-5'>
+    <main className='p-5 py-5'>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 p-5 max-w-sm m-auto bg-secondary rounded-md">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 p-5 max-w-sm m-auto bg-secondary rounded-md">
+          <h1 className='font-bold text-2xl capitalize'>login to acces your data</h1>
+          <p className='leading-3'>login to acces your data</p>
           {/* single form field */}
           <FormField
             control={form.control}

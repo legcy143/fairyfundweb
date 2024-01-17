@@ -8,16 +8,19 @@ export default function Home() {
   const { myGroups }: any = useGroup()
   return (
     <main className='p-5'>
+      <h1 className='text-xl font-semibold capitalize my-3'>my groups</h1>
       {myGroups?.map((e: any) => {
+        console.log(e)
         return (
           <>
             <Link href={`/groups/${e._id}`}>
-              <Button>groups</Button>
+              <Button variant={'outline'}>
+                {e.groupName}
+              </Button>
             </Link> <br />
           </>
         )
       })}
-      hello
     </main>
   )
 }

@@ -58,6 +58,7 @@ export const useAuth = create((set:any) => ({
                     isLogged: true,
                     userDetail: res.data.user
                 })
+                window.location.href="/"
             }
         } catch (e) {
             console.log("login error ", e)
