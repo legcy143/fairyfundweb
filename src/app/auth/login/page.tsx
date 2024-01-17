@@ -19,9 +19,10 @@ import {
 import { Input } from "@/components/ui/input"
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/store/useAuth'
+import Link from 'next/link'
 
 
-export default function Authentication() {
+export default function Login() {
 
   const router: any = useRouter();
   const { isLogged }: any = useAuth()
@@ -98,7 +99,15 @@ export default function Authentication() {
               </FormItem>
             )}
           />
-          <Button className='w-full mt-5' type="submit">login</Button>
+          <Button className='w-full mt-5' type="submit">Login</Button>
+          {/* route */}
+          <div className='w-full p-1 flex items-center justify-center'>
+            <Link href={"/auth/signup"}>
+              <Button variant={'link'} className='p-0'>
+                new user ?? signup
+              </Button>
+            </Link>
+          </div>
         </form>
       </Form>
     </main>

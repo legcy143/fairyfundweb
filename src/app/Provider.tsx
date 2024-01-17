@@ -10,9 +10,10 @@ import axios from "axios"
 import { API_URL } from "@/constants/API_URL"
 import { useAuth } from "@/store/useAuth"
 import { useGroup } from "@/store/useGroup"
+import ModelSpinner from "@/components/legcyUI/ModelSpinner"
 
 export function Provider({ children, ...props }: ThemeProviderProps) {
-    const { fetchUser, isLogged }: any = useAuth()
+    const { fetchUser, isLogged, startFetching }: any = useAuth()
     const { fetchMyGroups }: any = useGroup()
     useEffect(() => {
         console.log(isLogged)
@@ -59,6 +60,7 @@ export function Provider({ children, ...props }: ThemeProviderProps) {
     return (
         <NextThemesProvider {...props}>
             <ToastContainer />
+            {startFetching && <ModelSpinner/>}
             {children}
         </NextThemesProvider>
     )
