@@ -16,7 +16,7 @@ export function Provider({ children, ...props }: ThemeProviderProps) {
     const { fetchUser, isLogged, startFetching }: any = useAuth()
     const { fetchMyGroups }: any = useGroup()
     useEffect(() => {
-        console.log(isLogged)
+        // console.log(isLogged)
         if (typeof window != undefined) {
             if (!isLogged)
                 fetchUser()
@@ -25,42 +25,11 @@ export function Provider({ children, ...props }: ThemeProviderProps) {
         }
     }, [isLogged])
 
-    // useEffect(() => {
-    //     if (typeof window != undefined) {
-    //         let checkUser = () => {
-    //             axios.post(`${API_URL}/user/fetchuser`, {}, {
-    //                 headers: {
-    //                     authorization: localStorage.getItem("authtoken")
-    //                 }
-    //             }).then((e) => {
-    //                 if (e.data.success) {
-    //                     setUser(e.data.user);
-    //                     // if over searching for group
-    //                     axios.get(`${API_URL}/group/fetchmygroup`, {
-    //                         headers: {
-    //                             authorization: localStorage.getItem("authtoken")
-    //                         }
-    //                     }).then((e) => {
-    //                         if (e.data.success) {
-    //                             console.log("hii")
-    //                             router.push(`/groups/${e.data?.groups[0]?._id}`)
-    //                         }
-    //                         console.log(e)
-    //                     })
-    //                 }
-    //             }).catch((e) => {
-    //                 router.push("/authentication")
-    //             })
-    //         }
-    //         checkUser()
-    //     }
-    // }, []);
-
 
     return (
         <NextThemesProvider {...props}>
             <ToastContainer />
-            {startFetching && <ModelSpinner/>}
+            {startFetching && <ModelSpinner />}
             {children}
         </NextThemesProvider>
     )

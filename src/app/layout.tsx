@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Navbar from '@/components/local/Navbar'
 import { Provider } from './Provider'
+import { useAuth } from '@/store/useAuth'
 
 
 export const metadata: Metadata = {
@@ -23,9 +24,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className='max-w-[100rem] mx-auto space-y-4'>
-          <Navbar />
-          {children}
+          <main className='w-full max-w-[100rem] mx-auto h-[100vh] flex flex-col'>
+            <Navbar />
+            {children}
           </main>
         </Provider>
       </body>

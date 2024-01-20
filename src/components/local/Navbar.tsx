@@ -13,7 +13,7 @@ function Navbar() {
   const { setTheme } = useTheme()
   const router = useRouter()
   return (
-    <div className='px-5 h-[5rem] flex flex-row items-center justify-between shadow-md sticky top-0 backdrop-blur-3xl z-20'>
+    <div className='px-5 h-[4.5rem] flex-shrink-0 flex flex-row items-center justify-between shadow-md sticky top-0 backdrop-blur-3xl z-20 gap-1'>
       <Link href={"/"}>
         <h1 className='font-bold italic text-xl'>fairy funds</h1>
       </Link>

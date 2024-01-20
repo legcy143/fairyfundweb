@@ -50,12 +50,14 @@
   }
 }
 
+html{
+  user-select: none;
+}
+
 body{
   width: 100vw;
   height: 100vh;
   height: 100dvh;
-  overflow: hidden;
-  overflow-y: auto;
 }
 *::-webkit-scrollbar{
   width: 0;

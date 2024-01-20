@@ -4,7 +4,7 @@ import { BiRupee } from "react-icons/bi";
 export default function Members({ members = [{ _id: '0', role:"", credit: 0 }] }:any) {
   return (
     <div>
-      {members?.map((e:any) => <Membercard key={e?._id} name={e?.memberID.userName} role={e.role} credit={e?.credit} />)}
+      {members?.map((e:any) => <Membercard key={e?._id} name={e?.memberID?.userName ?? "deactivated"} role={e.role} credit={e?.credit} />)}
       {/* <Membercard />
       <Membercard />
       <Membercard /> */}

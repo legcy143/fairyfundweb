@@ -1,6 +1,6 @@
 "use client"
 import { Badge } from '@/components/ui/badge';
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { BiRupee } from "react-icons/bi";
 import { FaUserGroup } from "react-icons/fa6";
@@ -10,11 +10,11 @@ import NotFound from './NotFound';
 import Members from './Members';
 import { useGroup } from '@/store/useGroup';
 import { useAuth } from '@/store/useAuth';
-import Admin from './Admin';
 
 
 export default function page() {
-    const { groupID }:any = useParams();
+    const { groupID }: any = useParams();
+    let router = useRouter();
     const { myGroups }: any = useGroup()
     const { isLogged, userDetail }: any = useAuth()
     const [groupDetail, setgroupDetail] = useState<any>({ _id: 0 })
@@ -22,6 +22,7 @@ export default function page() {
     const [isAdmin, setIsAdmin] = useState<boolean>(false)
     const [myAmount, setmyAmount] = useState<number>(0)
     useEffect(() => {
+
         // validateing user validation 
         if (groupID.length > 20 && isLogged && myGroups) {
 
@@ -30,10 +31,10 @@ export default function page() {
 
             // set 
             setgroupDetail(g[0])
-            g[0].users?.map((e: any) => {
-                if (e.memberID._id == userDetail._id) {
+            g[0]?.users?.map((e: any) => {
+                if (e?.memberID?._id == userDetail?._id) {
                     setmyAmount(e.credit)
-                    if (e.role == "admin")
+                    if (e?.role == "admin")
                         setIsAdmin(true)
                     return;
                 }
@@ -100,6 +101,7 @@ export default function page() {
                     )}
                     {isAdmin &&
                         <TabsTrigger
+                            onClick={() => router.push(`${groupID}/admin`)}
                             value="admin">
                             admin
                         </TabsTrigger>
@@ -111,12 +113,6 @@ export default function page() {
                     {e.component}
                 </TabsContent>
                 )}
-                {isAdmin &&
-                    <TabsContent
-                        value='admin'>
-                        <Admin groupID={groupID} />
-                    </TabsContent>
-                }
             </Tabs>
 
 

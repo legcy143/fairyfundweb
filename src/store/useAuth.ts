@@ -17,7 +17,7 @@ export const useAuth = create((set: any) => ({
     isLoading: false,
     isLogged: false,
     userDetail: null,
-    startFetching: true,
+    startFetching: false,
 
     setUser: async (data: any) => {
         set({
@@ -45,6 +45,29 @@ export const useAuth = create((set: any) => ({
             set({
                 startFetching: false,
                 isLoading: false
+            })
+        }
+    },
+    UpdateProfile: async (data: any) => {
+        try {
+            set({
+                startFetching: true,
+            })
+            let res: any = await axios.post(`${API_URL}/user/editprofile`, data, { headers })
+            if (res.data.success) {
+                set({
+                    isLogged: true,
+                    userDetail: res.data.user
+                })
+                toast.success("Update Profile succesfully")
+            }
+        } catch (e:any) {
+            toast.error(e?.response?.data?.message)
+            console.log("edit user profile error ", e)
+        }
+        finally {
+            set({
+                startFetching: false
             })
         }
     },
