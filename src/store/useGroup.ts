@@ -56,15 +56,15 @@ export const useGroup = create((set: any) => ({
     // admin actions
     addNewItem: async (data: any) => {
         try {
-            let res: any = await axios.get(`${API_URL}/group/additem`, { headers })
+            let res: any = await axios.post(`${API_URL}/group/additem`, data, { headers })
             if (res.data.success) {
-                console.log("groups from fetching ", res)
                 set({
                     myGroups: res.data.groups
                 })
             }
         } catch (e) {
-            console.log("fetch groups error ", e)
+            toast.error("failed to add product")
+            console.log("error in adding products", e)
         }
         finally {
             set({

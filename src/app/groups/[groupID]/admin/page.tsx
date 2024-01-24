@@ -5,9 +5,14 @@ import NotFound from '../NotFound'
 import { MdAdminPanelSettings } from "react-icons/md";
 import { useGroup } from '@/store/useGroup'
 import { useParams } from 'next/navigation';
+import { IoMdArrowBack } from "react-icons/io";
+import { useRouter } from 'next/navigation';
+import AddItem from './AddItem';
+
 
 export default function page() {
   const { localFetchGroupByID, groupById } = useGroup();
+  const router = useRouter()
   const param = useParams();
   useEffect(() => {
     localFetchGroupByID(param.groupID as string)
@@ -22,7 +27,7 @@ export default function page() {
     },
     {
       value: "add products",
-      component: <TestMe />
+      component: <AddItem />
     },
     {
       value: "manage fund",
@@ -37,8 +42,9 @@ export default function page() {
     <main className='h-full overflow-hidden'>
       <Tabs defaultValue={tabOptions[0].value} className='max-h-[100%]  overflow-auto'>
         <div className='flex items-center justify-between p-5 flex-wrap'>
-          <div className='w-fit p-1'>
-            <h1 className='font-bold text-xl flex items-center '><MdAdminPanelSettings size={30} /> Admin Pannel</h1>
+          <div className='w-fit p-1 relative'>
+            
+            <h1 className='font-bold text-xl flex items-center '><IoMdArrowBack onClick={()=>router.back()} className='h-10 w-10 mr-5'/> <MdAdminPanelSettings size={30} /> Admin Pannel</h1>
             <p>view and manage your groups</p>
           </div>
           {/* <h1 className='p-1'>"group name</h1> */}
