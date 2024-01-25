@@ -16,12 +16,23 @@ const headers: any = {
 export const useGroup = create((set: any) => ({
     isGroupLoading: false,
     myGroups: [],
-    groupById: {},
+    groupByID: {},
 
-    localFetchGroupByID: (_id: string) => {
-        let arr = useGroup?.getState()?.myGroups;
+    // local fetch and add it in object with user detail like is he is admin or not
+    localFetchGroupByID: (_id: string, userID: string) => {
+        let arr: any = useGroup?.getState()?.myGroups;
         let group = arr.filter((e: any) => {
-            return e = e._id = _id
+            return e = e._id == _id
+        })
+        let isAdmin = false;
+        arr[0]?.users?.map((e: any) => {
+            if (e?.role == "admin") {
+                isAdmin = true
+            }
+            return;
+        });
+        set({
+            groupByID: { ...arr, isAdmin }
         })
         console.log("local func ", group)
     },
@@ -54,13 +65,17 @@ export const useGroup = create((set: any) => ({
         }
     },
     // admin actions
-    addNewItem: async (data: any) => {
+    addNewItem: async (data: any, userID: any) => {
         try {
             let res: any = await axios.post(`${API_URL}/group/additem`, data, { headers })
             if (res.data.success) {
+                let arr = useGroup.getState().myGroups
+                useGroup.getState().localFetchGroupByID(data.groupID, userID)
+                let oldData = arr.filter((e: any) => { return e = e._id != data.groupID })
                 set({
-                    myGroups: res.data.groups
+                    myGroups: [res.data.group, ...oldData]
                 })
+                toast.success("added suucesfully")
             }
         } catch (e) {
             toast.error("failed to add product")

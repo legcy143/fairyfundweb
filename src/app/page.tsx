@@ -28,23 +28,21 @@ export default function Home() {
         </Link>
       </div>
       {myGroups.length == 0 ? <>No groups found </> :
-        <div className='flex flex-wrap py-3'>
-          {myGroups?.map((e: any) => {
+        <div className='flex flex-wrap py-3 gap-3 items-center justify-center'>
+          {myGroups?.map((e: any , i:any) => {
             return (
-              <>
-                  <div className='p-5 rounded-lg shadow-sm flex gap-5 border cursor-pointer border-primary-foreground items-center justify-center w-full max-w-[25rem]' onClick={() => { router.push(`/groups/${e._id}`) }}>
+                  <div className='p-5 rounded-lg shadow-sm flex gap-5 border cursor-pointer border-primary-foreground items-center justify-center w-full max-w-[25rem]' onClick={() => { router.push(`/groups/${e._id}`) }} key={e?._id || i}>
                     <Avatar className="h-16 w-16">
                       <AvatarImage alt="User Logo" src="/placeholder.svg?height=64&width=64" />
                       <AvatarFallback>{e?.groupName[0]?.toUpperCase()}</AvatarFallback>
                     </Avatar>
-                    <div className='flex flex-col items-start flex-1 w-full mr-auto'>
+                    <div className='flex flex-col items-start flex-1 w-[50%] mr-auto'>
                       <h1 className='truncate w-full'>{e?.groupName}</h1>
                       <p className='truncate w-full'>{e?.groupBio}</p>
                       <p className='truncate text-right flex items-center justify-start gap-2 w-full'>{e?.users.length} <FaUsers /></p>
                     </div>
                     <IoIosArrowForward />
                   </div>
-               </>
             )
           })}
         </div>}

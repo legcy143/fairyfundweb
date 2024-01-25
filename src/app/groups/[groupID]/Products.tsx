@@ -23,6 +23,7 @@ export default function Products({ itemsDetail = [] }: any) {
     return (
         <main className='md:p-5'>
             {/* <h1>products</h1> */}
+            {itemsDetail.length == 0 && <p className='m-5 text-center capitalize'>No products available</p>}
             {itemsDetail?.map((e: any) => <SingleAccordion key={e._id}
                 date={new Date(e?.date).toLocaleString()}
                 addedBy={e.addedBy}
@@ -64,8 +65,8 @@ const SingleAccordion = ({ addedBy, broughtBy, date, includedMembers, item = [],
                             <TableRow>
                                 <TableHead className="w-[0.5rem]">s.no</TableHead>
                                 <TableHead>Item</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead className="text-right">Quantity</TableHead>
+                                <TableHead>quantity</TableHead>
+                                <TableHead className="text-right">price</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>

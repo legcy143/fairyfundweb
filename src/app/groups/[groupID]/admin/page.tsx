@@ -8,34 +8,48 @@ import { useParams } from 'next/navigation';
 import { IoMdArrowBack } from "react-icons/io";
 import { useRouter } from 'next/navigation';
 import AddItem from './AddItem';
+import Products from '../Products';
+import Requests from './Requests';
+import ManageFunds from './ManageFunds';
+import { useAuth } from '@/store/useAuth';
 
 
 export default function page() {
-  const { localFetchGroupByID, groupById } = useGroup();
+  const { localFetchGroupByID, groupByID }:any = useGroup();
+  const { userDetail }: any = useAuth()
   const router = useRouter()
   const param = useParams();
   useEffect(() => {
-    localFetchGroupByID(param.groupID as string)
-    console.log("group : ", groupById , param)
+    localFetchGroupByID(param.groupID as string , userDetail?._id);
+    return()=>{
+      console.log("return from admin page")
+    }
   }, [])
+  
+  useEffect(() => {
+    console.log("group : ", groupByID , param)
+  }, [groupByID])
 
+  if(!groupByID?.isAdmin){
+     return <p>unautherized acces</p>
+  }
 
   const tabOptions = [
     {
       value: "products",
-      component: <TestMe />
+      component: <Products />
     },
     {
       value: "add products",
-      component: <AddItem />
+      component: <AddItem groupID={param.groupID} userId={userDetail?._id}/>
     },
     {
       value: "manage fund",
-      component: <NotFound />
+      component: <ManageFunds />
     },
     {
       value: "Request",
-      component: <TestMe />
+      component: <Requests />
     },
   ]
   return (
