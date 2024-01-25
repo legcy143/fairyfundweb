@@ -107,8 +107,8 @@ return (
         </div>
       </div>
     </section>
-    <Button onClick={() => console.log({ ...itemData, groupID }, userID)}>Add item</Button>
-    {/* <Button onClick={() => addNewItem({ ...itemData, groupID }, userID)}>Add item</Button> */}
+    {/* <Button onClick={() => console.log({ ...itemData, groupID }, userID)}>Add item</Button> */}
+    <Button onClick={() => addNewItem({ ...itemData, groupID }, userID)}>Add item</Button> 
   </main>
 )
 }
