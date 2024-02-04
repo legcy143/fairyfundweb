@@ -15,62 +15,39 @@ import { useAuth } from '@/store/useAuth';
 export default function page() {
     const { groupID }: any = useParams();
     let router = useRouter();
-    const { myGroups }: any = useGroup()
+    const { localFetchGroupByID, groupByID, isGroupLoading }: any = useGroup()
     const { isLogged, userDetail }: any = useAuth()
-    const [groupDetail, setgroupDetail] = useState<any>({ _id: 0 })
-    const [groupLoading, setgroupLoading] = useState<boolean>(true)
-    const [isAdmin, setIsAdmin] = useState<boolean>(false)
-    const [myAmount, setmyAmount] = useState<number>(0)
+
     useEffect(() => {
-
-        // validateing user validation 
-        if (groupID.length > 20 && isLogged && myGroups) {
-
-            // filter group from grouops array
-            let g = myGroups.filter((e: any) => e._id == groupID);
-
-            // set 
-            setgroupDetail(g[0])
-            g[0]?.users?.map((e: any) => {
-                if (e?.memberID?._id == userDetail?._id) {
-                    setmyAmount(e.credit)
-                    if (e?.role == "admin")
-                        setIsAdmin(true)
-                    return;
-                }
-            })
-            // console.log("userDetail", userDetail, g[0])
-            setgroupLoading(false)
+        if(userDetail){
+          localFetchGroupByID(groupID as string , userDetail?._id);
         }
-        return () => {
-            setgroupDetail({ _id: 0 })
-            setgroupLoading(true)
-            setIsAdmin(false)
-            setmyAmount(0)
+        return()=>{
+          console.log("return from admin page")
         }
-    }, [isLogged, myGroups])
+      }, [userDetail])
+    // useEffect(() => {
+    //     console.log("group : ", groupByID)
+    //   }, [groupByID])
 
 
-
-    if (groupLoading) {
+    if (isGroupLoading) {
         return (
             <div>loading ..</div>
         )
     }
-    if (!isLogged || !groupDetail?._id) {
-        console.log(groupDetail)
-        return (
-            <div>404 || error</div>
-        )
-    }
-    const tabOptions = [
+    if(!groupByID){
+        return <p>404 Not Found</p>
+     }
+
+     const tabOptions = [
         {
             value: "Products",
-            component: <Products itemsDetail={groupDetail?.items} />
+            component: <Products itemsDetail={groupByID?.items} />
         },
         {
             value: "Members",
-            component: <Members members={groupDetail?.users} />
+            component: <Members members={groupByID?.users} />
         },
         {
             value: "history",
@@ -81,13 +58,14 @@ export default function page() {
             component: <NotFound />
         },
     ]
+
     return (
         <div className='p-5'>
             <div className='mb-5 flex flex-wrap  justify-between gap-5'>
-                <h2 className='capitalize font-semibold text-3xl flex-center gap-2'><FaUserGroup /> {groupDetail?.groupName}</h2>
+                <h2 className='capitalize font-semibold text-3xl flex-center gap-2'><FaUserGroup /> {groupByID?.groupName}</h2>
                 <div className='flex items-center justify-center gap-3 w-full md:w-fit md:min-w-[22rem] '>
-                    <MiniCard title='my funds' coin={myAmount} />
-                    <MiniCard title='group funds' coin={groupDetail?.funds} />
+                    <MiniCard title='my credit' coin={groupByID.myCredit} />
+                    <MiniCard title='group funds' coin={groupByID?.funds} />
                 </div>
             </div>
 
@@ -99,7 +77,7 @@ export default function page() {
                         {e.value}
                     </TabsTrigger>
                     )}
-                    {isAdmin &&
+                    {groupByID?.isAdmin &&
                         <TabsTrigger
                             onClick={() => router.push(`${groupID}/admin`)}
                             value="admin">
@@ -119,7 +97,6 @@ export default function page() {
         </div>
     )
 }
-
 const MiniCard = ({ title = "my funds", coin = 0, icon = <BiRupee /> }) => {
     let errorStyle = ""
     return (

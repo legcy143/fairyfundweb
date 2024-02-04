@@ -67,7 +67,7 @@ export default function Edit() {
           placeholder='e.g delhi ncr ...etc'
           onChangeText={(e) => handleOnChange('myLocation', e)} />
         {/* radio options */}
-        <RadioGroup defaultValue={"other"} className=' flex flex-col gap-2' onValueChange={(e) => { handleOnChange('gender', e) }}>
+        <RadioGroup defaultValue={userData.gender || "other"} className=' flex flex-col gap-2' onValueChange={(e) => { handleOnChange('gender', e) }}>
           <Label className="text-left capitalize mb-1">Gender</Label>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="female" id="r1" />

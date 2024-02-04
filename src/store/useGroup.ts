@@ -15,26 +15,44 @@ const headers: any = {
 
 export const useGroup = create((set: any) => ({
     isGroupLoading: false,
+    statusHandler: false,
     myGroups: [],
     groupByID: {},
 
     // local fetch and add it in object with user detail like is he is admin or not
-    localFetchGroupByID: (_id: string, userID: string) => {
+    localFetchGroupByID: async (_id: string, userID: string) => {
         let arr: any = useGroup?.getState()?.myGroups;
-        let group = arr.filter((e: any) => {
-            return e = e._id == _id
-        })
         let isAdmin = false;
-        arr[0]?.users?.map((e: any) => {
-            if (e?.role == "admin") {
-                isAdmin = true
+        let myCredit = 0;
+        let group = [];
+        if (arr.length == 0) {
+            try {
+                let res = await axios.get(`${API_URL}/group/fetchgroup/${_id}`, { headers });
+                if (res.data.success) {
+                    group = res.data.data;
+                }
+            } catch (e: any) {
+                toast.error(e.response.data.message)
+            }
+
+        } else {
+            group = arr.filter((e: any) => {
+                return e = e._id == _id
+            })?.[0]
+        }
+        group?.users?.map((e: any) => {
+            if(e?.memberID?._id == userID){
+                myCredit = e?.credit;
+                if (e?.role == "admin") {
+                    isAdmin = true
+                    return;
+                }
             }
             return;
         });
         set({
-            groupByID: { ...arr, isAdmin }
+            groupByID: { ...group, isAdmin , myCredit}
         })
-        console.log("local func ", group)
     },
 
     setGroup: async (data: any) => {
@@ -70,11 +88,12 @@ export const useGroup = create((set: any) => ({
             let res: any = await axios.post(`${API_URL}/group/additem`, data, { headers })
             if (res.data.success) {
                 let arr = useGroup.getState().myGroups
-                useGroup.getState().localFetchGroupByID(data.groupID, userID)
                 let oldData = arr.filter((e: any) => { return e = e._id != data.groupID })
                 set({
                     myGroups: [res.data.group, ...oldData]
                 })
+                
+                await useGroup.getState().localFetchGroupByID(data.groupID, userID)
                 toast.success("added suucesfully")
             }
         } catch (e) {
@@ -95,12 +114,20 @@ export const useGroup = create((set: any) => ({
             if (res.data.success) {
                 let prevList = useGroup?.getState()?.myGroups;
                 set({
-                    myGroups: [res.data?.group, ...prevList]
+                    myGroups: [res.data?.group, ...prevList],
+                    statusHandler: true
                 })
                 toast.success("group created succesfully")
             }
         } catch (error) {
             toast.error("group creation failed")
+        } finally {
+            setTimeout(() => {
+                set({
+                    isGroupLoading: false,
+                    statusHandler: false,
+                })
+            }, 100);
         }
     }
 

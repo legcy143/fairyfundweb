@@ -20,24 +20,26 @@ export default function page() {
   const router = useRouter()
   const param = useParams();
   useEffect(() => {
-    localFetchGroupByID(param.groupID as string , userDetail?._id);
+    if(userDetail){
+      localFetchGroupByID(param.groupID as string , userDetail?._id);
+    }
     return()=>{
       console.log("return from admin page")
     }
-  }, [])
+  }, [userDetail])
   
-  useEffect(() => {
-    console.log("group : ", groupByID , param)
-  }, [groupByID])
+  // useEffect(() => {
+  //   console.log("group : ", groupByID , param)
+  // }, [groupByID])
 
-  if(!groupByID?.isAdmin){
+  if(!groupByID){
      return <p>unautherized acces</p>
   }
 
   const tabOptions = [
     {
       value: "products",
-      component: <Products />
+      component: <Products isAdmin={true} itemsDetail={groupByID.items}/>
     },
     {
       value: "add products",
