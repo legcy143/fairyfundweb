@@ -12,6 +12,7 @@ import Products from '../Products';
 import Requests from './Requests';
 import ManageFunds from './ManageFunds';
 import { useAuth } from '@/store/useAuth';
+import InviteKey from './InviteKey';
 
 
 export default function page() {
@@ -51,7 +52,11 @@ export default function page() {
     },
     {
       value: "Request",
-      component: <Requests />
+      component: <Requests requestList={groupByID?.request}  groupID={param?.groupID as string} />
+    },
+    {
+      value: "Invite keys",
+      component: <InviteKey keysList={groupByID?.inviteKeys} groupID={param?.groupID as string} userID={userDetail?._id}/>
     },
   ]
   return (

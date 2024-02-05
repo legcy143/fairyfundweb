@@ -16,6 +16,7 @@ const headers: any = {
 export const useGroup = create((set: any) => ({
     isGroupLoading: false,
     statusHandler: false,
+    SendInviteResponse : {},
     myGroups: [],
     groupByID: {},
 
@@ -36,12 +37,13 @@ export const useGroup = create((set: any) => ({
             }
 
         } else {
-            group = arr.filter((e: any) => {
-                return e = e._id == _id
+            group = arr?.filter((e: any) => {
+                // console.log("in local fetch " ,e)
+                return e = e?._id == _id
             })?.[0]
         }
         group?.users?.map((e: any) => {
-            if(e?.memberID?._id == userID){
+            if (e?.memberID?._id == userID) {
                 myCredit = e?.credit;
                 if (e?.role == "admin") {
                     isAdmin = true
@@ -51,13 +53,23 @@ export const useGroup = create((set: any) => ({
             return;
         });
         set({
-            groupByID: { ...group, isAdmin , myCredit}
+            groupByID: { ...group, isAdmin, myCredit }
         })
     },
 
     setGroup: async (data: any) => {
         set({
             userDetail: data
+        })
+    },
+
+    HandleChangeGroup  : async(apiGroup:any)=>{
+        let arr = useGroup.getState().myGroups
+        let oldData = arr.filter((e: any) => { return e = e._id != apiGroup._id })
+        let prevgroupByID = useGroup?.getState()?.groupByID;
+        set({
+            myGroups: [...oldData ,apiGroup],
+            groupByID:{...prevgroupByID , ...apiGroup}
         })
     },
 
@@ -89,11 +101,12 @@ export const useGroup = create((set: any) => ({
             if (res.data.success) {
                 let arr = useGroup.getState().myGroups
                 let oldData = arr.filter((e: any) => { return e = e._id != data.groupID })
+                let prevgroupByID = useGroup?.getState()?.groupByID;
                 set({
-                    myGroups: [res.data.group, ...oldData]
+                    myGroups: [...oldData ,res.data.group],
+                    groupByID:{...prevgroupByID , ...res?.data?.group}
                 })
-                
-                await useGroup.getState().localFetchGroupByID(data.groupID, userID)
+
                 toast.success("added suucesfully")
             }
         } catch (e) {
@@ -129,8 +142,78 @@ export const useGroup = create((set: any) => ({
                 })
             }, 100);
         }
-    }
+    },
 
+    GenrateInviteKey: async (groupID: any , userID:any) => {
+        try {
+            set({ isGroupLoading: true })
+            let res = await axios.post(`${API_URL}/group/genrateinvitelink`, {groupID}, { headers });
+            console.log(res)
+            if (res.data.success) {
+                await useGroup.getState().HandleChangeGroup(res?.data?.data);
+                toast.success("genrate invite key succesfully");
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error("genrate invite key failed")
+        }
+    },
+
+    RemoveInviteKey: async (groupID: any , inviteKeyID:any) => {
+        try {
+            set({ isGroupLoading: true })
+            let res = await axios.post(`${API_URL}/group/removeinvitelink`, {groupID , inviteKeyID}, { headers });
+            // console.log(res)
+            if (res.data.success) {
+                await useGroup.getState().HandleChangeGroup(res?.data?.data);
+                toast.success("remove invite key succesfully");
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error("remove invite key failed")
+        }finally {
+            set({
+                isGroupLoading: false
+            })
+        }
+    },
+
+    SendInviteRequest: async (inviteKey: any , IV:any) => {
+        try {
+            set({ isGroupLoading: true })
+            let res = await axios.post(`${API_URL}/group/sendrequest`, {IV , inviteKey}, { headers });
+            // console.log(res)
+            if (res.data.success) {
+                toast.success("request send success");
+            }
+        } catch (error:any) {
+            console.log(error)
+            toast.error( error?.response?.data?.message || "request send faield")
+            // if(error?.response)
+        } finally {
+            set({
+                isGroupLoading: false
+            })
+        }
+    },
+    GroupInviteReponse: async (memberID: any , groupID:any , isAccept:any = false) => {
+        try {
+            set({ isGroupLoading: true })
+            let res = await axios.post(`${API_URL}/group/groupinviteresponse`, {memberID , groupID , isAccept}, { headers });
+            // console.log(res)
+            if (res.data.success) {
+                await useGroup.getState().HandleChangeGroup(res?.data?.data);
+                toast.success(res?.data?.message || "something went wrong");
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error("failed to add")
+        } finally {
+            set({
+                isGroupLoading: false
+            })
+        }
+    }
 
 
 }))
