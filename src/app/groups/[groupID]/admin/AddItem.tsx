@@ -6,10 +6,11 @@ import { useGroup } from '@/store/useGroup'
 import React, { useState } from 'react'
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { RxCrossCircled } from "react-icons/rx";
+import { toast } from 'react-toastify'
 
 
 export default function AddItem({ groupID, userID }: any) {
-  const { addNewItem }: any = useGroup()
+  const { addNewItem , isGroupLoading }: any = useGroup()
   type AddItemDataTypes = {
     title: string;
     message: string;
@@ -31,19 +32,7 @@ export default function AddItem({ groupID, userID }: any) {
   const AddItemBlock = () => {
     setitemData(e => ({ ...e, item: [...e.item, { name: "", quantity: "", price: 0 }] }))
   }
-  /* form gpt 
-  const handleAddItem = (key: string, index: number, value: string | number) => {
-    setitemData((prevData) => {
-      const changeItem = prevData.item.map((e: any, i: any) => {
-        if (i === index) {
-          e = { ...e, [key]: value };
-        }
-        return e;
-      });
-      return { ...prevData, item: [...changeItem] };
-    });
-  };
-  */
+  
   const removeItemBlock = (index: number | string) => {
     setitemData((e) => {
       return { ...e, item: e.item.filter((e, i) => i !== index) }
@@ -62,6 +51,23 @@ const handleAddItem = (key: string, index: number, value: string | number) => {
 const handleOnChange = (key: string, value: string | boolean) => {
   setitemData((e => ({ ...e, [key]: value })))
 }
+
+const handleSubmit = async()=>{
+  if(!itemData?.title.length){
+    toast.error("Fields are required");
+    return
+  }
+  await addNewItem({ ...itemData, groupID }, userID);
+  setitemData({
+    title: "",
+    message: "",
+    broughtBy: "",
+    item: [
+      { name: "", quantity: "", price: 0 }
+    ]
+  })
+}
+
 return (
   <main className='p-5 max-w-[30rem] m-auto'>
     <CardTitle>Add items</CardTitle>
@@ -78,11 +84,12 @@ return (
         label='brought By'
         onChangeText={(e) => handleOnChange('broughtBy', e)} />
       <div>
-        <h1 className='flex items-center justify-between'>
-          Items
+        <div className='flex items-center justify-between'>
+          <p>Items<CardDescription>Add minimum one item </CardDescription> </p>
           <IoIosAddCircleOutline className='h-6 w-6' onClick={AddItemBlock} />
-        </h1>
+        </div>
         <div className='flex flex-col gap-4 p-4'>
+    {/* <CardDescription>Add minimum one item </CardDescription> */}
           {itemData?.item?.map((e, i) => {
             return (
               <div className='flex gap-2 items-center justify-end' key={i}>
@@ -108,7 +115,7 @@ return (
       </div>
     </section>
     {/* <Button onClick={() => console.log({ ...itemData, groupID }, userID)}>Add item</Button> */}
-    <Button onClick={() => addNewItem({ ...itemData, groupID }, userID)}>Add item</Button> 
+    <Button disabled={isGroupLoading} onClick={handleSubmit}>Add item</Button> 
   </main>
 )
 }

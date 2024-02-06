@@ -25,10 +25,16 @@ export function Provider({ children, ...props }: ThemeProviderProps) {
         }
     }, [isLogged])
 
-
     return (
         <NextThemesProvider {...props}>
-            <ToastContainer />
+            <ToastContainer
+                className={'max-w-[90%]'}
+                position="top-right"
+                autoClose={2000}
+                closeOnClick={false}
+                draggable={true}
+                pauseOnHover={false}
+            />
             {startFetching && <ModelSpinner />}
             {children}
         </NextThemesProvider>

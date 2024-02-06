@@ -54,7 +54,7 @@ const SingleAccordion = ({ addedBy, broughtBy, date, includedMembers, item = [],
                             <p className='truncate w-full text-wrap line-clamp-1 text-start flex-1'>
                                 {title}
                             </p>
-                            <p>{totalPrice}</p>
+                            <p>₹ {totalPrice}</p>
                         </div>
                     </div>
                 </AccordionTrigger>
@@ -75,14 +75,14 @@ const SingleAccordion = ({ addedBy, broughtBy, date, includedMembers, item = [],
                                     <TableCell className="font-medium">{i + 1}</TableCell>
                                     <TableCell>{e.name}</TableCell>
                                     <TableCell>{e.quantity}</TableCell>
-                                    <TableCell className="text-right ">{e.price}</TableCell>
+                                    <TableCell className="text-right ">₹ {e.price}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                         <TableFooter>
                             <TableRow>
                                 <TableCell colSpan={3}>Total</TableCell>
-                                <TableCell className="text-right">${totalPrice}</TableCell>
+                                <TableCell className="text-right">₹ {totalPrice}</TableCell>
                             </TableRow>
                         </TableFooter>
                     </Table>

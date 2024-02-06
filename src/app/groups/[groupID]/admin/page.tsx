@@ -64,13 +64,12 @@ export default function page() {
       <Tabs defaultValue={tabOptions[0].value} className='max-h-[100%]  overflow-auto'>
         <div className='flex items-center justify-between p-5 flex-wrap'>
           <div className='w-fit p-1 relative'>
-            
             <h1 className='font-bold text-xl flex items-center '><IoMdArrowBack onClick={()=>router.back()} className='h-10 w-10 mr-5'/> <MdAdminPanelSettings size={30} /> Admin Pannel</h1>
             <p>view and manage your groups</p>
           </div>
           {/* <h1 className='p-1'>"group name</h1> */}
         </div>
-        <TabsList className="w-[100%] overflow-auto h-fit justify-start sticky top-0 z-10 p-2">
+        <TabsList className="w-[100%] overflow-auto h-fit justify-start sticky top-0 z-10 p-2 ">
           {tabOptions?.map(e => <TabsTrigger
             key={e.value}
             value={e.value}>
@@ -79,6 +78,7 @@ export default function page() {
           )}
         </TabsList>
         {tabOptions?.map(e => <TabsContent
+        className='p-2 mb-5'
           key={e.value}
           value={e.value}>
           {e.component}

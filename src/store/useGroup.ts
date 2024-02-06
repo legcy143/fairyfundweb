@@ -97,6 +97,9 @@ export const useGroup = create((set: any) => ({
     // admin actions
     addNewItem: async (data: any, userID: any) => {
         try {
+            set({
+                isGroupLoading: true
+            })
             let res: any = await axios.post(`${API_URL}/group/additem`, data, { headers })
             if (res.data.success) {
                 let arr = useGroup.getState().myGroups
@@ -156,6 +159,8 @@ export const useGroup = create((set: any) => ({
         } catch (error) {
             console.log(error)
             toast.error("genrate invite key failed")
+        }finally{
+            set({ isGroupLoading: false })
         }
     },
 
