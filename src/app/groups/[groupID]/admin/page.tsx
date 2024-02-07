@@ -51,7 +51,7 @@ export default function page() {
       component: <ManageFunds />
     },
     {
-      value: "Request",
+      value: `Request (${groupByID?.request?.length})`,
       component: <Requests requestList={groupByID?.request}  groupID={param?.groupID as string} />
     },
     {
