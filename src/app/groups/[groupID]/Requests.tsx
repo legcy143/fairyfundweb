@@ -23,11 +23,11 @@ export default function Requests({ requestList = [] , groupID=''}) {
               <p>{e?.memberID?.userName}</p>
               <p className='truncate max-w-[10rem]'>{e?.memberID?.bio}</p>
           </div>
+          <RxCrossCircled size={65} onClick={()=>{
+            GroupInviteReponse(e?.memberID?._id , groupID , false)
+          }}/>
             <IoCheckmarkCircleOutline size={65} onClick={()=>{
               GroupInviteReponse(e?.memberID?._id , groupID , true)
-            }}/>
-            <RxCrossCircled size={65} onClick={()=>{
-              GroupInviteReponse(e?.memberID?._id , groupID , false)
             }}/>
           </div>
         )

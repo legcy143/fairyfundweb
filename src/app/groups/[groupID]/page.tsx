@@ -1,7 +1,6 @@
 "use client"
-import { Badge } from '@/components/ui/badge';
 import { useParams, useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { BiRupee } from "react-icons/bi";
 import { FaUserGroup } from "react-icons/fa6";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -10,6 +9,12 @@ import NotFound from './NotFound';
 import Members from './Members';
 import { useGroup } from '@/store/useGroup';
 import { useAuth } from '@/store/useAuth';
+import Error404 from '@/components/local/Error404';
+import AddItem from './AddItem';
+import ManageFunds from './ManageFunds';
+import Requests from './Requests';
+import InviteKey from './InviteKey';
+import Setting from './Setting';
 
 
 export default function page() {
@@ -37,17 +42,17 @@ export default function page() {
         )
     }
     if(!groupByID){
-        return <p>404 Not Found</p>
+        return <Error404/>
      }
 
-     const tabOptions = [
+     const Options = [
         {
             value: "Products",
             component: <Products itemsDetail={groupByID?.items} />
         },
         {
             value: "Members",
-            component: <Members members={groupByID?.users} />
+            component: <Members members={groupByID?.users} isAdmin={groupByID?.isAdmin}/>
         },
         {
             value: "history",
@@ -58,6 +63,33 @@ export default function page() {
             component: <NotFound />
         },
     ]
+    const AdminOptions = [
+          {
+            value: "add products",
+            component: <AddItem groupID={groupID} userId={userDetail?._id}/>
+          },
+          {
+            value: "manage fund",
+            component: <ManageFunds />
+          },
+          {
+            value: `Request (${groupByID?.request?.length})`,
+            component: <Requests requestList={groupByID?.request}  groupID={groupID as string} />
+          },
+          {
+            value: "Invite keys",
+            component: <InviteKey keysList={groupByID?.inviteKeys} groupID={groupID as string} userID={userDetail?._id}/>
+          },
+    ]
+    let tabOptions:any =[...Options]
+    if(groupByID?.isAdmin){
+        tabOptions = [...Options , ...AdminOptions]
+    }
+    tabOptions.push({
+            value: "Setting",
+            component: <Setting groupID={groupID as string} isAdmin={groupByID?.isAdmin} userID={userDetail?._id}/>
+    })
+    // console.log(tabOptions)
 
     return (
         <div className='p-5'>
@@ -71,21 +103,21 @@ export default function page() {
 
             <Tabs defaultValue={tabOptions[0].value} className='max-h-[70vh] overflow-auto'>
                 <TabsList className="w-[100%] overflow-auto h-fit justify-start sticky top-0 z-10">
-                    {tabOptions?.map(e => <TabsTrigger
+                    {tabOptions?.map((e:any) => <TabsTrigger
                         key={e.value}
                         value={e.value}>
                         {e.value}
                     </TabsTrigger>
                     )}
-                    {groupByID?.isAdmin &&
+                    {/* {groupByID?.isAdmin &&
                         <TabsTrigger
                             onClick={() => router.push(`${groupID}/admin`)}
                             value="admin">
                             admin
                         </TabsTrigger>
-                    }
+                    } */}
                 </TabsList>
-                {tabOptions?.map(e => <TabsContent
+                {tabOptions?.map((e:any) => <TabsContent
                     key={e.value}
                     value={e.value}>
                     {e.component}
@@ -102,7 +134,7 @@ const MiniCard = ({ title = "my funds", coin = 0, icon = <BiRupee /> }) => {
     return (
         <div className={`flex flex-col  rounded border p-4 text-base font-semibold transition-colors focus:outline-none border-solid bg-secondary text-secondary-foreground hover:bg-secondary/80 w-[100%] max-w-[15rem] ${errorStyle}`}>
             <p className='flex items-center justify-between capitalize'>{title} {icon}</p>
-            <p>{coin}</p>
+            <p className={`${coin<0 ? 'text-red-500' : coin>0 && 'text-green-500'}`}>{coin}</p>
         </div>
     )
 }

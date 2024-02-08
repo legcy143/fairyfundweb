@@ -19,11 +19,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { CardContent, Card } from "@/components/ui/card"
 import SendJoinRequest from './groups/SendJoinRequest'
-
-
-
-
+import { memo } from 'react'
 
 export default function Home() {
   const { myGroups }: any = useGroup();
@@ -53,21 +51,44 @@ export default function Home() {
         <div className='flex flex-wrap py-3 gap-3 items-center justify-center'>
           {myGroups?.map((e: any, i: any) => {
             return (
-              <div className='p-5 rounded-lg shadow-sm flex gap-5 border cursor-pointer border-primary-foreground items-center justify-center w-full max-w-[25rem]' onClick={() => { router.push(`/groups/${e._id}`) }} key={e?._id || i}>
-                <Avatar className="h-16 w-16">
-                  <AvatarImage alt="User Logo" src="/placeholder.svg?height=64&width=64" />
-                  <AvatarFallback>{e?.groupName[0]?.toUpperCase()}</AvatarFallback>
-                </Avatar>
-                <div className='flex flex-col items-start flex-1 w-[50%] mr-auto'>
-                  <h1 className='truncate w-full'>{e?.groupName}</h1>
-                  <p className='truncate w-full'>{e?.groupBio}</p>
-                  <p className='truncate text-right flex items-center justify-start gap-2 w-full'>{e?.users.length} <FaUsers /></p>
-                </div>
-                <IoIosArrowForward />
-              </div>
+              <GroupCard
+                key={e._id}
+                onClick={() => { router.push(`/groups/${e._id}`) }}
+                fallBackAvtar={e?.groupName[0]?.toUpperCase()}
+                groupBio={e?.groupBio}
+                groupName={e?.groupName}
+                members={e?.users.length} 
+                funds={e?.funds}
+                />
             )
           })}
         </div>}
     </main>
   )
 }
+
+
+
+
+const GroupCard = memo(({ fallBackAvtar = "", groupName = "", groupBio = "", members = 0, funds = 0, onClick}:any)=>{
+  return (
+    <Card className='p-3 pb-0 w-[20rem] cursor-pointer' onClick={onClick}>
+      <CardContent className="flex flex-col">
+        <div className="flex items-center gap-4">
+          <Avatar className="h-10 w-10">
+            <AvatarImage alt="Music Makers" src="/placeholder-avatar.jpg" />
+            <AvatarFallback>{fallBackAvtar}</AvatarFallback>
+          </Avatar>
+          <h3 className="text-lg font-medium leading-6">{groupName}</h3>
+        </div>
+        <p className="text-sm leading-5 text-gray-500 dark:text-gray-400">
+          {groupBio}
+        </p>
+        <div className="flex items-center mt-4">
+          <p className="text-sm font-medium leading-5 flex items-center gap-2">{members} <FaUsers /></p>
+          <p className={`ml-auto text-sm font-medium leading-5 ${funds <0 ? 'text-red-500' : funds >0 && 'text-green-500'}`}>₹{funds}</p>
+        </div>
+      </CardContent>
+    </Card>
+  )
+})
