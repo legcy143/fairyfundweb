@@ -15,11 +15,12 @@ export default function RouteList({ PathList }: RouteListTypes) {
 
     return (
         <>
-            {PathList.map((e: any) => {
+            {PathList.map((e: any, i) => {
                 let active = "bg-primary text-secondary";
                 let nonAcitive = "hover:underline";
                 return (
                     <div
+                        key={i}
                         onClick={() => { router.push(e.path) }}
                         className={`md:px-4 h-[3rem] md:h-[2.7rem] rounded font-medium capitalize cursor-pointer flex flex-col md:flex-row items-center justify-center md:justify-start gap-0 md:gap-2 ${pathname == e.path ? active : nonAcitive}`}
                     >
