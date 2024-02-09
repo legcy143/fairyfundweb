@@ -6,6 +6,8 @@
 [/] = leave group
 
 //currently working on 
+
+//left parts
 [x] = promote as admin
 [x] = update group
 [x] = task CRUD;

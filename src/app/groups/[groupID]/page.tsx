@@ -52,7 +52,7 @@ export default function page() {
         },
         {
             value: "Members",
-            component: <Members members={groupByID?.users} isAdmin={groupByID?.isAdmin}/>
+            component: <Members members={groupByID?.users} groupID={groupID} isAdmin={groupByID?.isAdmin} isOwner={groupByID?.isOwner}/>
         },
         {
             value: "history",

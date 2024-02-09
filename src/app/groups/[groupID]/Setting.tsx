@@ -1,7 +1,7 @@
 "use client"
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { MdDeleteOutline } from "react-icons/md";
 import { CiWarning } from "react-icons/ci";
 import {
@@ -13,6 +13,9 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import { useGroup } from '@/store/useGroup';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 
 
@@ -29,7 +32,7 @@ export default function Setting({ groupID, userID, isAdmin = false }: any) {
                             <Button variant={'destructive'}>Leave group</Button>
                         </DialogTrigger>
                         <DialogContent>
-                            <CommonModel title="leave this group" />
+                            <CommonModel groupID={groupID} title="leave this group" action="leave"/>
                         </DialogContent>
                     </Dialog>
                     {isAdmin &&
@@ -38,7 +41,7 @@ export default function Setting({ groupID, userID, isAdmin = false }: any) {
                                 <Button variant={'destructive'} className='gap-2'><MdDeleteOutline /> Delete Group</Button>
                             </DialogTrigger>
                             <DialogContent>
-                                <CommonModel title="delete this group" />
+                                <CommonModel groupID={groupID} title="delete this group" action="delete"/>
                             </DialogContent>
                         </Dialog>
                     }
@@ -48,7 +51,21 @@ export default function Setting({ groupID, userID, isAdmin = false }: any) {
     )
 }
 
-const CommonModel = ({ title }: any) => {
+const CommonModel = ({ title , groupID , action }: any) => {
+    const { LeaveGroup, deleteGroup ,statusHandler,isGroupLoading}: any = useGroup();
+    const HandleRemove = async(e:any)=>{
+        e.preventDefault();
+        switch (action) {
+            case 'leave':
+                await LeaveGroup(groupID)
+                break;
+            case 'delete':
+                await deleteGroup(groupID)
+                break;
+        }
+    }
+
+
     return (
         <>
             <DialogHeader>
@@ -63,11 +80,12 @@ const CommonModel = ({ title }: any) => {
                     <Button>No , keep</Button>
                 </DialogTrigger>
                 <DialogTrigger>
-                    <Button>yes, {title?.slice(0,6)}</Button>
+                    <Button
+                    disabled={isGroupLoading}
+                        onClick={HandleRemove}
+                        variant={'destructive'}>yes, {title?.slice(0, 6)}</Button>
                 </DialogTrigger>
             </div>
         </>
     )
 }
-const DeleteGroupButton = () => { }
-const LeaveGroupButton = () => { }
