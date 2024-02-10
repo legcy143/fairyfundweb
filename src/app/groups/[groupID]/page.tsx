@@ -31,9 +31,6 @@ export default function page() {
           console.log("return from admin page")
         }
       }, [userDetail])
-    // useEffect(() => {
-    //     console.log("group : ", groupByID)
-    //   }, [groupByID])
 
 
     if (isGroupLoading) {
@@ -66,7 +63,7 @@ export default function page() {
     const AdminOptions = [
           {
             value: "add products",
-            component: <AddItem groupID={groupID} userId={userDetail?._id}/>
+            component: <AddItem groupID={groupID} userID={userDetail?._id} membersList={groupByID?.users}/>
           },
           {
             value: "manage fund",

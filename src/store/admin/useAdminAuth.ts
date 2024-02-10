@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 let authToken: string | null = '';
 if (typeof window !== 'undefined') {
-    authToken = sessionStorage.getItem("authtoken")
+    authToken = sessionStorage.getItem("Adminauthtoken")
 }
 
 const headers: any = {

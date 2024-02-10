@@ -48,7 +48,7 @@ export const useGroup = create((set: any) => ({
                 isOwner = e?.memberID?._id == group?.groupOwner;
                 // console.log(isOwner , e?.memberID?._id ,e?.groupOwner  ,group)
                 myCredit = e?.credit;
-                isAdmin = e?.role == "admin"
+                isAdmin = e?.role == "admin";
                 return;
             }
             return;
@@ -64,14 +64,35 @@ export const useGroup = create((set: any) => ({
         })
     },
 
-    HandleChangeGroup  : async(apiGroup:any)=>{
+    HandleChangeGroup  : async(apiGroup:any , userID?:any)=>{
         let arr = useGroup.getState().myGroups
         let oldData = arr.filter((e: any) => { return e = e._id != apiGroup._id })
         let prevgroupByID = useGroup?.getState()?.groupByID;
-        set({
-            myGroups: [...oldData ,apiGroup],
-            groupByID:{...prevgroupByID , ...apiGroup}
-        })
+        console.log(apiGroup , userID)
+        if(userID){
+            let isAdmin = false;
+            let isOwner = false;
+            let myCredit = 0;
+            apiGroup?.users?.map((e: any) => {
+                if (e?.memberID?._id == userID) {
+                    isOwner = e?.memberID?._id == apiGroup?.groupOwner;
+                    myCredit = e?.credit;
+                    isAdmin = e?.role == "admin";
+                    return;
+                }
+                return;
+            });
+            set({
+                myGroups: [...oldData ,apiGroup],
+                groupByID:{...prevgroupByID , ...apiGroup ,isOwner,isAdmin, myCredit}
+            })
+        }
+        else{
+            set({
+                myGroups: [...oldData ,apiGroup],
+                groupByID:{...prevgroupByID , ...apiGroup }
+            })
+        }
     },
 
     fetchMyGroups: async () => {
@@ -103,14 +124,8 @@ export const useGroup = create((set: any) => ({
             })
             let res: any = await axios.post(`${API_URL}/group/additem`, data, { headers })
             if (res.data.success) {
-                let arr = useGroup.getState().myGroups
-                let oldData = arr.filter((e: any) => { return e = e._id != data.groupID })
-                let prevgroupByID = useGroup?.getState()?.groupByID;
-                set({
-                    myGroups: [...oldData ,res.data.group],
-                    groupByID:{...prevgroupByID , ...res?.data?.group}
-                })
-
+                console.log(userID)
+                 useGroup.getState().HandleChangeGroup(res?.data?.group , userID)
                 toast.success("added suucesfully")
             }
         } catch (e) {

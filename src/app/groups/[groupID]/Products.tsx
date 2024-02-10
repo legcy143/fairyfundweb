@@ -26,8 +26,9 @@ export default function Products({ itemsDetail = [] }: any) {
             {itemsDetail.length == 0 && <p className='m-5 text-center capitalize'>No products available</p>}
             {itemsDetail?.map((e: any) => <SingleAccordion key={e._id}
                 date={new Date(e?.date).toLocaleString()}
-                addedBy={e.addedBy}
-                broughtBy={e.broughtBy}
+                addedBy={e?.addedBy?.userName ? e?.addedBy?.userName : "N/A"}
+                broughtBy={e?.broughtBy?.userName ? e?.broughtBy?.userName : "N/A"}
+                // broughtBy={e.broughtBy}
                 title={e.title}
                 totalPrice={e.totalPrice}
                 item={e.item}

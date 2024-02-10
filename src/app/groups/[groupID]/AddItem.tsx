@@ -6,11 +6,22 @@ import { useGroup } from '@/store/useGroup'
 import React, { useState } from 'react'
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { RxCrossCircled } from "react-icons/rx";
-import { toast } from 'react-toastify'
+import { toast } from 'react-toastify';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Label } from '@/components/ui/label'
 
 
-export default function AddItem({ groupID, userID }: any) {
-  const { addNewItem , isGroupLoading }: any = useGroup()
+
+export default function AddItem({ groupID, userID, membersList = [] }: any) {
+  const { addNewItem, isGroupLoading }: any = useGroup()
   type AddItemDataTypes = {
     title: string;
     message: string;
@@ -18,7 +29,7 @@ export default function AddItem({ groupID, userID }: any) {
     item: {
       name: string,
       quantity: string,
-      price: number,
+      price: number | string,
     }[];
   };
   const [itemData, setitemData] = useState<AddItemDataTypes>({
@@ -26,97 +37,118 @@ export default function AddItem({ groupID, userID }: any) {
     message: "",
     broughtBy: "",
     item: [
-      { name: "", quantity: "", price: 0 }
+      { name: "", quantity: "", price: "" }
     ]
   })
   const AddItemBlock = () => {
-    setitemData(e => ({ ...e, item: [...e.item, { name: "", quantity: "", price: 0 }] }))
+    setitemData(e => ({ ...e, item: [...e.item, { name: "", quantity: "", price: "" }] }))
   }
-  
+
   const removeItemBlock = (index: number | string) => {
     setitemData((e) => {
       return { ...e, item: e.item.filter((e, i) => i !== index) }
-  })
-}
-const handleAddItem = (key: string, index: number, value: string | number) => {
-  let changeItem = itemData.item.map((e: any, i: any) => {
-    if (i === index) {
-      e = { ...e, [key]: value }
-    }
-    return e;
-  })
-  setitemData((e: any) => ({ ...e, item: [...changeItem] }))
-}
-
-const handleOnChange = (key: string, value: string | boolean) => {
-  setitemData((e => ({ ...e, [key]: value })))
-}
-
-const handleSubmit = async()=>{
-  if(!itemData?.title.length){
-    toast.error("Fields are required");
-    return
+    })
   }
-  await addNewItem({ ...itemData, groupID }, userID);
-  setitemData({
-    title: "",
-    message: "",
-    broughtBy: "",
-    item: [
-      { name: "", quantity: "", price: 0 }
-    ]
-  })
-}
+  const handleAddItem = (key: string, index: number, value: string | number) => {
+    let changeItem = itemData.item.map((e: any, i: any) => {
+      if (i === index) {
+        e = { ...e, [key]: value }
+      }
+      return e;
+    })
+    setitemData((e: any) => ({ ...e, item: [...changeItem] }))
+  }
 
-return (
-  <main className='p-5 max-w-[30rem] m-auto'>
-    <CardTitle>Add items</CardTitle>
-    <CardDescription>click on add when you are done</CardDescription>
-    <section className="flex flex-col gap-4 my-5">
-      <LabelWithInput value={itemData.title}
-        label='title' onChangeText={(e) => handleOnChange('title', e)} />
-      <LabelWithInput
-        value={itemData.message}
-        label='message'
-        onChangeText={(e) => handleOnChange('message', e)} />
-      <LabelWithInput
+  const handleOnChange = (key: string, value: string | boolean) => {
+    setitemData((e => ({ ...e, [key]: value })))
+  }
+
+  const handleSubmit = async () => {
+    if (!itemData?.title.length) {
+      toast.error("Fields are required");
+      return
+    }
+    console.log("from ", userID)
+    await addNewItem({ ...itemData, groupID }, userID);
+    setitemData({
+      title: "",
+      message: "",
+      broughtBy: "",
+      item: [
+        { name: "", quantity: "", price: '' }
+      ]
+    })
+  }
+
+  return (
+    <main className='p-5 max-w-[30rem] m-auto'>
+      <CardTitle>Add items</CardTitle>
+      <CardDescription>click on add when you are done</CardDescription>
+      <section className="flex flex-col gap-4 my-5">
+        <LabelWithInput value={itemData.title}
+          label='title' onChangeText={(e) => handleOnChange('title', e)} />
+        <LabelWithInput
+          value={itemData.message}
+          label='message'
+          onChangeText={(e) => handleOnChange('message', e)} />
+        {/* <LabelWithInput
         value={itemData.broughtBy}
         label='brought By'
-        onChangeText={(e) => handleOnChange('broughtBy', e)} />
-      <div>
-        <div className='flex items-center justify-between'>
-          <p>Items<CardDescription>Add minimum one item </CardDescription> </p>
-          <IoIosAddCircleOutline className='h-6 w-6' onClick={AddItemBlock} />
+        onChangeText={(e) => handleOnChange('broughtBy', e)} /> */}
+        <div className='flex flex-col gap-2'>
+        <Label>broughtBy</Label>
+        <Select  defaultValue={itemData.broughtBy} onValueChange={(e)=>{
+              // console.log(e)
+              handleOnChange('broughtBy', e)
+            }}>
+          <SelectTrigger>
+            <SelectValue placeholder="Select a member"/>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Group members</SelectLabel>
+              {
+                membersList?.map((e:any)=><SelectItem key={e._id} value={e?.memberID?._id}>{e?.memberID?.userName}</SelectItem>)
+              }
+            </SelectGroup>
+          </SelectContent>
+        </Select>
         </div>
-        <div className='flex flex-col gap-4 p-4'>
-    {/* <CardDescription>Add minimum one item </CardDescription> */}
-          {itemData?.item?.map((e, i) => {
-            return (
-              <div className='flex gap-2 items-center justify-end' key={i}>
-                <LabelWithInput
-                  value={e.name}
-                  label={`item #${i + 1}`}
-                  placeholder='name'
-                  onChangeText={(text) => handleAddItem('name', i, text)} />
-                <LabelWithInput
-                  value={e.quantity}
-                  label='Quntity'
-                  onChangeText={(text) => handleAddItem('quantity', i, text)} />
-                <LabelWithInput
-                  value={e.price}
-                  label='price'
-                  type='number'
-                  onChangeText={(text) => handleAddItem('price', i, +text)} />
-                <RxCrossCircled className='h-10 w-10' onClick={() => removeItemBlock(i)} />
-              </div>
-            )
-          })}
+
+        <div>
+          <div className='flex items-center justify-between'>
+            <p>Items<CardDescription>Add minimum one item </CardDescription> </p>
+            <IoIosAddCircleOutline className='h-6 w-6' onClick={AddItemBlock} />
+          </div>
+          <div className='flex flex-col gap-4 p-4'>
+            {/* <CardDescription>Add minimum one item </CardDescription> */}
+            {itemData?.item?.map((e, i) => {
+              return (
+                <div className='flex gap-2 items-center justify-end' key={i}>
+                  <LabelWithInput
+                    value={e.name}
+                    label={`item #${i + 1}`}
+                    placeholder='name'
+                    onChangeText={(text) => handleAddItem('name', i, text)} />
+                  <LabelWithInput
+                    value={e.quantity}
+                    label='Quntity'
+                    onChangeText={(text) => handleAddItem('quantity', i, text)} />
+                  <LabelWithInput
+                    value={e.price}
+                    label='price'
+                    type='number'
+                    onChangeText={(text) => handleAddItem('price', i, text)} />
+                  <RxCrossCircled className='h-10 w-10' onClick={() => removeItemBlock(i)} />
+                </div>
+              )
+            })}
+          </div>
         </div>
-      </div>
-    </section>
-    {/* <Button onClick={() => console.log({ ...itemData, groupID }, userID)}>Add item</Button> */}
-    <Button disabled={isGroupLoading} onClick={handleSubmit}>Add item</Button> 
-  </main>
-)
+      </section>
+      {/* <Button onClick={() => console.log({ ...itemData, groupID }, userID)}>Add item</Button> */}
+      <Button disabled={isGroupLoading} onClick={handleSubmit}>Add item</Button>
+    </main>
+  )
 }
 
