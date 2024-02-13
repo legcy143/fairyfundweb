@@ -7,6 +7,10 @@
 [/] = promote or demote as admin
 
 //currently working on 
+[x] = update funds
+
+// bug fix 
+[x] = group owner itself not demote as admin
 
 //left parts
 [x] = update group

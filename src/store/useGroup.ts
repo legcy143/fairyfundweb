@@ -273,7 +273,7 @@ export const useGroup = create((set: any) => ({
         }
     },
     PromoteOrDemoteAsAdmin: async (memberID: any , groupID:any , isPromote:any = false) => {
-        console.log("promote as admin")
+        // console.log("promote as admin")
         try {
             set({ isGroupLoading: true })
             let res = await axios.post(`${API_URL}/group/promoteordemoteasadmin`, {memberID , groupID , isPromote}, { headers });
@@ -284,6 +284,25 @@ export const useGroup = create((set: any) => ({
             }
         } catch (error:any) {
             // console.log(error)
+            toast.error( error?.response?.data?.message ||"failed")
+        } finally {
+            set({
+                isGroupLoading: false
+            })
+        }
+    },
+
+    ManageUserCredit : async(memberID:any , groupID:any ,userID:any, amount:any)=>{
+        try {
+            set({ isGroupLoading: true })
+            let res = await axios.post(`${API_URL}/group/manageusercredit`, {memberID , groupID , amount}, { headers });
+            if (res.data.success) {
+                console.log(res)
+                await useGroup.getState().HandleChangeGroup(res?.data?.data , userID);
+                toast.success(res?.data?.message || "something went wrong");
+            }
+        } catch (error:any) {
+            console.log(error)
             toast.error( error?.response?.data?.message ||"failed")
         } finally {
             set({

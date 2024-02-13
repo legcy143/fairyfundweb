@@ -49,7 +49,7 @@ export default function page() {
         },
         {
             value: "Members",
-            component: <Members members={groupByID?.users} groupID={groupID} isAdmin={groupByID?.isAdmin} isOwner={groupByID?.isOwner}/>
+            component: <Members members={groupByID?.users} groupID={groupID} isAdmin={groupByID?.isAdmin} isOwner={groupByID?.isOwner} userID={userDetail?._id}/>
         },
         {
             value: "history",
