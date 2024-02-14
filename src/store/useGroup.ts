@@ -16,7 +16,7 @@ const headers: any = {
 export const useGroup = create((set: any) => ({
     isGroupLoading: false,
     statusHandler: false,
-    SendInviteResponse : {},
+    SendInviteResponse: {},
     myGroups: [],
     groupByID: {},
 
@@ -26,7 +26,7 @@ export const useGroup = create((set: any) => ({
         let isAdmin = false;
         let isOwner = false;
         let myCredit = 0;
-        let group:any = [];
+        let group: any = [];
         if (arr.length == 0) {
             try {
                 let res = await axios.get(`${API_URL}/group/fetchgroup/${_id}`, { headers });
@@ -54,22 +54,17 @@ export const useGroup = create((set: any) => ({
             return;
         });
         set({
-            groupByID: { ...group, isOwner,isAdmin, myCredit}
+            groupByID: { ...group, isOwner, isAdmin, myCredit }
         })
     },
 
-    setGroup: async (data: any) => {
-        set({
-            userDetail: data
-        })
-    },
 
-    HandleChangeGroup  : async(apiGroup:any , userID?:any)=>{
+    HandleChangeGroup: async (apiGroup: any, userID?: any) => {
         let arr = useGroup.getState().myGroups
         let oldData = arr.filter((e: any) => { return e = e._id != apiGroup._id })
         let prevgroupByID = useGroup?.getState()?.groupByID;
-        console.log(apiGroup , userID)
-        if(userID){
+        console.log(apiGroup, userID)
+        if (userID) {
             let isAdmin = false;
             let isOwner = false;
             let myCredit = 0;
@@ -83,14 +78,14 @@ export const useGroup = create((set: any) => ({
                 return;
             });
             set({
-                myGroups: [...oldData ,apiGroup],
-                groupByID:{...prevgroupByID , ...apiGroup ,isOwner,isAdmin, myCredit}
+                myGroups: [...oldData, apiGroup],
+                groupByID: { ...prevgroupByID, ...apiGroup, isOwner, isAdmin, myCredit }
             })
         }
-        else{
+        else {
             set({
-                myGroups: [...oldData ,apiGroup],
-                groupByID:{...prevgroupByID , ...apiGroup }
+                myGroups: [...oldData, apiGroup],
+                groupByID: { ...prevgroupByID, ...apiGroup }
             })
         }
     },
@@ -125,7 +120,7 @@ export const useGroup = create((set: any) => ({
             let res: any = await axios.post(`${API_URL}/group/additem`, data, { headers })
             if (res.data.success) {
                 console.log(userID)
-                 useGroup.getState().HandleChangeGroup(res?.data?.group , userID)
+                useGroup.getState().HandleChangeGroup(res?.data?.group, userID)
                 toast.success("added suucesfully")
             }
         } catch (e) {
@@ -165,13 +160,13 @@ export const useGroup = create((set: any) => ({
     LeaveGroup: async (groupID: any) => {
         try {
             set({ isGroupLoading: true })
-            let res = await axios.post(`${API_URL}/group/leave`, {groupID}, { headers })
+            let res = await axios.post(`${API_URL}/group/leave`, { groupID }, { headers })
             if (res.data.success) {
-                window.location.href="/"
+                window.location.href = "/"
                 toast.success(res.data.message || "client side error")
             }
-        } catch (error:any) {
-            console.log("hii there" , error)
+        } catch (error: any) {
+            console.log("hii there", error)
             toast.error(error?.response?.data?.message || "failed to leave group")
         } finally {
             setTimeout(() => {
@@ -184,12 +179,12 @@ export const useGroup = create((set: any) => ({
     deleteGroup: async (groupID: any) => {
         try {
             set({ isGroupLoading: true })
-            let res = await axios.post(`${API_URL}/group/delete`, {groupID}, { headers })
+            let res = await axios.post(`${API_URL}/group/delete`, { groupID }, { headers })
             if (res.data.success) {
-                window.location.href="/"
+                window.location.href = "/"
                 toast.success(res.data.message || "client side error")
             }
-        } catch (error:any) {
+        } catch (error: any) {
             toast.error(error?.response?.data?.message || "failed to leave group")
         } finally {
             setTimeout(() => {
@@ -200,10 +195,10 @@ export const useGroup = create((set: any) => ({
         }
     },
 
-    GenrateInviteKey: async (groupID: any , userID:any) => {
+    GenrateInviteKey: async (groupID: any, userID: any) => {
         try {
             set({ isGroupLoading: true })
-            let res = await axios.post(`${API_URL}/group/genrateinvitelink`, {groupID}, { headers });
+            let res = await axios.post(`${API_URL}/group/genrateinvitelink`, { groupID }, { headers });
             console.log(res)
             if (res.data.success) {
                 await useGroup.getState().HandleChangeGroup(res?.data?.data);
@@ -212,15 +207,15 @@ export const useGroup = create((set: any) => ({
         } catch (error) {
             console.log(error)
             toast.error("genrate invite key failed")
-        }finally{
+        } finally {
             set({ isGroupLoading: false })
         }
     },
 
-    RemoveInviteKey: async (groupID: any , inviteKeyID:any) => {
+    RemoveInviteKey: async (groupID: any, inviteKeyID: any) => {
         try {
             set({ isGroupLoading: true })
-            let res = await axios.post(`${API_URL}/group/removeinvitelink`, {groupID , inviteKeyID}, { headers });
+            let res = await axios.post(`${API_URL}/group/removeinvitelink`, { groupID, inviteKeyID }, { headers });
             // console.log(res)
             if (res.data.success) {
                 await useGroup.getState().HandleChangeGroup(res?.data?.data);
@@ -229,24 +224,24 @@ export const useGroup = create((set: any) => ({
         } catch (error) {
             console.log(error)
             toast.error("remove invite key failed")
-        }finally {
+        } finally {
             set({
                 isGroupLoading: false
             })
         }
     },
 
-    SendInviteRequest: async (inviteKey: any , IV:any) => {
+    SendInviteRequest: async (inviteKey: any, IV: any) => {
         try {
             set({ isGroupLoading: true })
-            let res = await axios.post(`${API_URL}/group/sendrequest`, {IV , inviteKey}, { headers });
+            let res = await axios.post(`${API_URL}/group/sendrequest`, { IV, inviteKey }, { headers });
             // console.log(res)
             if (res.data.success) {
                 toast.success("request send success");
             }
-        } catch (error:any) {
+        } catch (error: any) {
             console.log(error)
-            toast.error( error?.response?.data?.message || "request send faield")
+            toast.error(error?.response?.data?.message || "request send faield")
             // if(error?.response)
         } finally {
             set({
@@ -254,10 +249,10 @@ export const useGroup = create((set: any) => ({
             })
         }
     },
-    GroupInviteReponse: async (memberID: any , groupID:any , isAccept:any = false) => {
+    GroupInviteReponse: async (memberID: any, groupID: any, isAccept: any = false) => {
         try {
             set({ isGroupLoading: true })
-            let res = await axios.post(`${API_URL}/group/groupinviteresponse`, {memberID , groupID , isAccept}, { headers });
+            let res = await axios.post(`${API_URL}/group/groupinviteresponse`, { memberID, groupID, isAccept }, { headers });
             // console.log(res)
             if (res.data.success) {
                 await useGroup.getState().HandleChangeGroup(res?.data?.data);
@@ -272,19 +267,19 @@ export const useGroup = create((set: any) => ({
             })
         }
     },
-    PromoteOrDemoteAsAdmin: async (memberID: any , groupID:any , isPromote:any = false) => {
+    PromoteOrDemoteAsAdmin: async (memberID: any, groupID: any, isPromote: any = false) => {
         // console.log("promote as admin")
         try {
             set({ isGroupLoading: true })
-            let res = await axios.post(`${API_URL}/group/promoteordemoteasadmin`, {memberID , groupID , isPromote}, { headers });
+            let res = await axios.post(`${API_URL}/group/promoteordemoteasadmin`, { memberID, groupID, isPromote }, { headers });
             // console.log(res)
             if (res.data.success) {
                 await useGroup.getState().HandleChangeGroup(res?.data?.data);
                 toast.success(res?.data?.message || "something went wrong");
             }
-        } catch (error:any) {
+        } catch (error: any) {
             // console.log(error)
-            toast.error( error?.response?.data?.message ||"failed")
+            toast.error(error?.response?.data?.message || "failed")
         } finally {
             set({
                 isGroupLoading: false
@@ -292,24 +287,79 @@ export const useGroup = create((set: any) => ({
         }
     },
 
-    ManageUserCredit : async(memberID:any , groupID:any ,userID:any, amount:any)=>{
+    ManageUserCredit: async (memberID: any, groupID: any, userID: any, amount: any) => {
         try {
             set({ isGroupLoading: true })
-            let res = await axios.post(`${API_URL}/group/manageusercredit`, {memberID , groupID , amount}, { headers });
+            let res = await axios.post(`${API_URL}/group/manageusercredit`, { memberID, groupID, amount }, { headers });
             if (res.data.success) {
                 console.log(res)
-                await useGroup.getState().HandleChangeGroup(res?.data?.data , userID);
+                await useGroup.getState().HandleChangeGroup(res?.data?.data, userID);
                 toast.success(res?.data?.message || "something went wrong");
             }
-        } catch (error:any) {
+        } catch (error: any) {
             console.log(error)
-            toast.error( error?.response?.data?.message ||"failed")
+            toast.error(error?.response?.data?.message || "failed")
         } finally {
             set({
                 isGroupLoading: false
             })
         }
-    }
+    },
+    // todo handler userID , groupID ,todo
+    AddTodo: async (groupID: string, userID: string, todo: string) => {
+        try {
+            set({ isGroupLoading: true })
+            let res = await axios.post(`${API_URL}/group/todo/add`, { groupID, todo }, { headers });
+            if (res.data.success) {
+                console.log(res)
+                await useGroup.getState().HandleChangeGroup(res?.data?.data, userID);
+                toast.success(res?.data?.message || "something went wrong");
+            }
+        } catch (error: any) {
+            console.log(error)
+            toast.error(error?.response?.data?.message || "failed")
+        } finally {
+            set({
+                isGroupLoading: false
+            })
+        }
+    },
+    MarkAsDoneTodo: async (groupID: string, userID: string, todoID: string ) => {
+        try {
+            set({ isGroupLoading: true })
+            let res = await axios.post(`${API_URL}/group/todo/done`, { groupID, todoID }, { headers });
+            if (res.data.success) {
+                console.log(res)
+                await useGroup.getState().HandleChangeGroup(res?.data?.data, userID);
+                toast.success(res?.data?.message || "something went wrong");
+            }
+        } catch (error: any) {
+            console.log(error)
+            toast.error(error?.response?.data?.message || "failed")
+        } finally {
+            set({
+                isGroupLoading: false
+            })
+        }
+    },
+    DeleteTodo: async (groupID: string, userID: string, todoID: string) => {
+        try {
+            set({ isGroupLoading: true })
+            let res = await axios.post(`${API_URL}/group/todo/delete`, { groupID, todoID }, { headers });
+            if (res.data.success) {
+                // console.log(res)
+                await useGroup.getState().HandleChangeGroup(res?.data?.data, userID);
+                toast.success(res?.data?.message || "something went wrong");
+            }
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message || "failed")
+        } finally {
+            set({
+                isGroupLoading: false
+            })
+        }
+    },
+
 
 
 }))

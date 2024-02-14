@@ -21,7 +21,7 @@ import { useRouter } from 'next/navigation';
 
 export default function Setting({ groupID, userID, isAdmin = false }: any) {
     return (
-        <main className='max-w-[50rem] m-auto'>
+        <main>
             {/* danger activities */}
             <Card className='border-none'>
                 <CardContent className='flex flex-col items-start gap-2 p-3'>

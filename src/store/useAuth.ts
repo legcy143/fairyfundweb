@@ -18,6 +18,7 @@ export const useAuth = create((set: any) => ({
     isLogged: false,
     userDetail: null,
     startFetching: false,
+    isUserLoading: false,
 
     setUser: async (data: any) => {
         set({
@@ -61,7 +62,7 @@ export const useAuth = create((set: any) => ({
                 })
                 toast.success("Update Profile succesfully")
             }
-        } catch (e:any) {
+        } catch (e: any) {
             toast.error(e?.response?.data?.message)
             console.log("edit user profile error ", e)
         }
@@ -144,6 +145,49 @@ export const useAuth = create((set: any) => ({
             toast("Failed to Logout")
             console.log("error : ", error)
         }
-    }
+    },
+
+    MarkAllSeenNotification: async () => {
+        set({
+            isUserLoading: true,
+        })
+        try {
+            let res: any = await axios.post(`${API_URL}/user/notification/seenall`, {}, {headers})
+            console.log("res" , res)
+            if (res.data.success) {
+                set({
+                    userDetail: res.data.data
+                })
+            }
+        } catch (e: any) {
+            console.log(e)
+            toast(e?.response?.data?.message)
+        }
+        finally {
+            set({
+                isUserLoading: false
+            })
+        }
+    },
+    RemoveAllNotification: async () => {
+        set({
+            isUserLoading: true,
+        })
+        try {
+            let res: any = await axios.post(`${API_URL}/user/notification/removeall`, {}, {headers})
+            if (res.data.success) {
+                set({userDetail: res.data.data })
+                toast(res?.data?.message)
+            }
+        } catch (e: any) {
+            console.log(e)
+            toast(e?.response?.data?.message)
+        }
+        finally {
+            set({
+                isUserLoading: false
+            })
+        }
+    },
 
 }))
