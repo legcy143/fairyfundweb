@@ -15,6 +15,7 @@ import ManageFunds from './ManageFunds';
 import Requests from './Requests';
 import InviteKey from './InviteKey';
 import Setting from './Setting';
+import Activity from './Activity';
 
 
 export default function page() {
@@ -52,8 +53,8 @@ export default function page() {
             component: <Members members={groupByID?.users} groupID={groupID} isAdmin={groupByID?.isAdmin} isOwner={groupByID?.isOwner} userID={userDetail?._id}/>
         },
         {
-            value: "history",
-            component: <NotFound />
+            value: "Activity",
+            component: <Activity activityList={groupByID?.history}/>
         },
         {
             value: "task",
