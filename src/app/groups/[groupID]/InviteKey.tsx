@@ -19,22 +19,20 @@ import { toast } from 'react-toastify'
 import { WhatsappIcon, WhatsappShareButton } from 'react-share'
 import { SlOptionsVertical as OptionIcons } from "react-icons/sl";
 import { FaWhatsapp } from "react-icons/fa";
-import Loading from '@/app/Loading'
 
 
 
 
 
-export default function InviteKey({ keysList = [], groupID = '', userID = '' }) {
+export default function InviteKey({ keysList = [], groupID = '' }) {
   const { GenrateInviteKey, RemoveInviteKey, isGroupLoading }: any = useGroup();
   // const router = useRouter();
   const currentDomain = `${window.location.protocol}//${window.location.host}`;
   return (
     <main className='p-2'>
-      {isGroupLoading && <Loading />}
       <nav className='flex items-center justify-between gap-5'>
         <h1>Invite Keys [ {keysList.length} ] </h1>
-        <Button onClick={() => { GenrateInviteKey(groupID, userID) }}>Genrate New key</Button>
+        <Button onClick={() => { GenrateInviteKey(groupID) }}>Genrate New key</Button>
         {/* <Dialog>
           <DialogTrigger asChild>
           </DialogTrigger>

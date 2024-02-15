@@ -17,10 +17,7 @@ import { Badge } from "@/components/ui/badge"
 import LableWithInput from "@/components/local/LableWithInput"
 import { MoreVertical } from 'lucide-react';
 
-
-
-
-export default function Members({ members, isAdmin, groupID, isOwner , userID}: any) {
+export default function Members({ members, isAdmin, groupID, isOwner }: any) {
   return (
     <div>
       {/* {members?.map((e:any) => console.log(e))} */}
@@ -34,7 +31,6 @@ export default function Members({ members, isAdmin, groupID, isOwner , userID}: 
         bio={e?.memberID?.bio ?? "N/A"}
         role={e.role}
         credit={e?.credit}
-        userID={userID}
       />)}
       {/* <Membercard />
       <Membercard />
@@ -43,7 +39,7 @@ export default function Members({ members, isAdmin, groupID, isOwner , userID}: 
   )
 }
 
-const Membercard = ({ name = "", bio = "", role = "member", credit = -1, isAdmin, memberID, groupID, isOwner , userID}: any) => {
+const Membercard = ({ name = "", bio = "", role = "member", credit = -1, isAdmin, memberID, groupID, isOwner }: any) => {
   const { PromoteOrDemoteAsAdmin }: any = useGroup();
   return (
     <div className='flex items-center justify-between p-3 border m-1 rounded border-border'>
@@ -52,10 +48,8 @@ const Membercard = ({ name = "", bio = "", role = "member", credit = -1, isAdmin
 
       {isAdmin &&
         <Sheet>
-          <SheetTrigger>
-            <Button variant={'outline'}>
+          <SheetTrigger className='bordered-varient'>
               <MoreVertical />
-            </Button>
           </SheetTrigger>
           <SheetContent>
             {/* options */}
@@ -88,7 +82,7 @@ const Membercard = ({ name = "", bio = "", role = "member", credit = -1, isAdmin
                       Promote as admin
                     </ActionButton>
                 }
-                <AmountActionForm credit={credit} memberID={memberID} groupID={groupID} userID={userID}/>
+                <AmountActionForm credit={credit} memberID={memberID} groupID={groupID} />
               </div>
             </>
             {/*  */}
@@ -98,29 +92,31 @@ const Membercard = ({ name = "", bio = "", role = "member", credit = -1, isAdmin
     </div>
   )
 }
+// {/* <Button </Button> */}
 
 const ActionButton = (props: any) => {
   return (
-    <Button variant={'outline'} className='justify-start' {...props}>{props.children}</Button>
+    <SheetTrigger className='bordered-varient w-full' {...props}>{props.children}
+    </SheetTrigger>
   )
 }
 
-const AmountActionForm = ({ credit = "" ,memberID, groupID ,userID}: any) => {
-  const { ManageUserCredit}: any = useGroup();
+const AmountActionForm = ({ credit = "", memberID, groupID }: any) => {
+  const { ManageUserCredit }: any = useGroup();
   const [amount, setamount] = useState('')
   return (
     <div className='flex flex-col gap-2 my-5'>
       <LableWithInput
         placeholder='enter amount'
-        label={`credit (${credit+ " + "}${amount.length ? amount : "0"}  =  ${credit + (+amount)})`}
+        label={`credit (${credit + " + "}${amount.length ? amount : "0"}  =  ${credit + (+amount)})`}
         type='number'
         value={amount}
         onChangeText={(e) => setamount(e)} />
-      <div className='ml-auto'>
-        <Button onClick={()=>{
-          ManageUserCredit(memberID,groupID,userID,+amount)
-        }}>Update fund</Button>
-      </div>
+        <SheetTrigger className='justify-start bg-primary border border-input  hover:bg-primary hover:text-accent-foreground text-sm p-2 text-start rounded ml-auto'
+          onClick={() => {
+            ManageUserCredit(memberID, groupID, +amount)
+          }}>Update fund
+        </SheetTrigger>
     </div>
   )
 }

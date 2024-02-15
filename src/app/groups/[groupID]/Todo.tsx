@@ -7,13 +7,13 @@ import TimeAgo from '@/utils/TimeAgo'
 import { DeleteIcon, Trash, Trash2 } from 'lucide-react'
 import React, { useState } from 'react'
 
-export default function Todo({ isAdmin = false, groupID = "", userID = "", todoList = [] }: any) {
+export default function Todo({ isAdmin = false, groupID = "", todoList = [] }: any) {
     const { MarkAsDoneTodo, DeleteTodo } = useGroup()
     return (
         <main>
             {/* add task */}
             {isAdmin &&
-                <AddTodoHandler groupID={groupID} userID={userID} />
+                <AddTodoHandler groupID={groupID} />
             }
             {/* read task */}
             {todoList.length == 0 ? <p className='m-auto text-center'>No Todo Found</p> :
@@ -30,10 +30,10 @@ export default function Todo({ isAdmin = false, groupID = "", userID = "", todoL
                                         <div className='flex items-center gap-3'>
                                             {
                                                 !e?.isDone && isAdmin &&
-                                                <Checkbox defaultChecked={e?.isDone} onCheckedChange={(i) => { i && MarkAsDoneTodo(groupID, userID, e._id) }} />
+                                                <Checkbox defaultChecked={e?.isDone} onCheckedChange={(i) => { i && MarkAsDoneTodo(groupID, e._id) }} />
                                             }
                                             <p className={`text-sm my-1 flex-1 ${e?.isDone && "line-through"}`}>{e?.todo}</p>
-                                           
+
                                         </div>
                                     </div>
                                 )
@@ -51,12 +51,12 @@ export default function Todo({ isAdmin = false, groupID = "", userID = "", todoL
                                         <div className='flex items-center gap-3'>
                                             {/* {
                                                 !e?.isDone && isAdmin &&
-                                                <Checkbox defaultChecked={e?.isDone} onCheckedChange={(i) => { i && MarkAsDoneTodo(groupID, userID, e._id) }} />
+                                                <Checkbox defaultChecked={e?.isDone} onCheckedChange={(i) => { i && MarkAsDoneTodo(groupID, e._id) }} />
                                             } */}
                                             <p className={`text-sm my-1 flex-1 ${e?.isDone && "line-through"}`}>{e?.todo}</p>
                                             {
                                                 e?.isDone && isAdmin &&
-                                                <Trash2 onClick={() => { DeleteTodo(groupID, userID, e._id) }} size={17} className='text-red-500 ml-auto' />
+                                                <Trash2 onClick={() => { DeleteTodo(groupID, e._id) }} size={17} className='text-red-500 ml-auto' />
                                             }
                                         </div>
                                     </div>
@@ -71,8 +71,8 @@ export default function Todo({ isAdmin = false, groupID = "", userID = "", todoL
 }
 
 
-const AddTodoHandler = ({ groupID = "", userID = "" }) => {
-    const { AddTodo }: any = useGroup()
+const AddTodoHandler = ({ groupID = "" }) => {
+    const { AddTodo, isGroupLoading }: any = useGroup()
     const [todo, settodo] = useState('')
     return (
         <section className='flex flex-col gap-5 p-1 py-5'>
@@ -83,7 +83,11 @@ const AddTodoHandler = ({ groupID = "", userID = "" }) => {
             <LabelWithInput label={"todo"}
                 value={todo}
                 onChangeText={(e) => { settodo(e) }} />
-            <Button className='ml-auto' onClick={() => { AddTodo(groupID, userID, todo) }}>Add Task</Button>
+            <Button className='ml-auto' disabled={isGroupLoading} onClick={async () => {
+                await AddTodo(groupID, todo);
+                settodo(e=>"");
+            }}
+            >Add todo</Button>
         </section>
     )
 }

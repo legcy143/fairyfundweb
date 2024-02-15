@@ -20,7 +20,7 @@ import { Label } from '@/components/ui/label'
 
 
 
-export default function AddItem({ groupID, userID, membersList = [] }: any) {
+export default function AddItem({ groupID, membersList = [] }: any) {
   const { addNewItem, isGroupLoading }: any = useGroup()
   type AddItemDataTypes = {
     title: string;
@@ -68,8 +68,7 @@ export default function AddItem({ groupID, userID, membersList = [] }: any) {
       toast.error("Fields are required");
       return
     }
-    console.log("from ", userID)
-    await addNewItem({ ...itemData, groupID }, userID);
+    await addNewItem({ ...itemData, groupID });
     setitemData({
       title: "",
       message: "",
@@ -146,7 +145,7 @@ export default function AddItem({ groupID, userID, membersList = [] }: any) {
           </div>
         </div>
       </section>
-      {/* <Button onClick={() => console.log({ ...itemData, groupID }, userID)}>Add item</Button> */}
+      {/* <Button onClick={() => console.log({ ...itemData, groupID })}>Add item</Button> */}
       <Button disabled={isGroupLoading} onClick={handleSubmit}>Add item</Button>
     </main>
   )

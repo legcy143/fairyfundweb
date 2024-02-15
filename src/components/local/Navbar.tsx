@@ -104,7 +104,7 @@ const NotificationHandler = ({ router, notifications = [], MarkAllSeenNotificati
 
             }
             return (
-              <div className='bg-secondary p-3 rounded'>
+              <div className='bg-secondary p-3 rounded' key={e?._id}>
                 <div className='flex items-center justify-between'>
                   <p className='text-base font-bold  '>{e.title}</p>
                   <p className='text-xs opacity-50'>{TimeAgo(new Date(e?.createdAt))}</p>

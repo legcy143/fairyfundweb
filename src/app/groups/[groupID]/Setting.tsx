@@ -19,7 +19,7 @@ import { useRouter } from 'next/navigation';
 
 
 
-export default function Setting({ groupID, userID, isAdmin = false }: any) {
+export default function Setting({ groupID, isAdmin = false }: any) {
     return (
         <main>
             {/* danger activities */}
