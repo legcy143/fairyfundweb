@@ -17,18 +17,14 @@ export default function Edit() {
     userName: string;
     bio: string;
     myLocation: string;
-    phoneNumber: string;
     isPrivate: boolean,
-    email: string;
     gender: "male" | "female" | "other";
   };
   const [userData, setuserData] = useState<UserData>({
     name: userDetail?.name,
     userName: userDetail?.userName,
     bio: userDetail?.bio,
-    myLocation: userDetail?.myLocation,
-    phoneNumber: userDetail?.phoneNumber,
-    email: userDetail?.email,
+    myLocation:userDetail?.myLocation,
     gender: userDetail?.gender,
     isPrivate: userDetail?.isPrivate,
   })
@@ -50,17 +46,6 @@ export default function Edit() {
           value={userData.bio}
           label='bio'
           onChangeText={(e) => handleOnChange('bio', e)} />
-        <LabelWithInput
-          value={userData.phoneNumber}
-          maxLength={10}
-          label="phone number"
-          placeholder='9999999999'
-          onChangeText={(e) => handleOnChange('phoneNumber', e)} />
-        <LabelWithInput
-          value={userData.email}
-          label='email'
-          placeholder='email@gmail.com'
-          onChangeText={(e) => handleOnChange('email', e)} />
         <LabelWithInput
           value={userData.myLocation}
           label='my Location'

@@ -11,6 +11,7 @@ import { API_URL } from "@/constants/API_URL"
 import { useAuth } from "@/store/useAuth"
 import { useGroup } from "@/store/useGroup"
 import ModelSpinner from "@/components/legcyUI/ModelSpinner"
+import { Toaster } from "@/components/ui/sonner"
 
 export function Provider({ children, ...props }: ThemeProviderProps) {
     const { fetchUser, isLogged, startFetching }: any = useAuth()
@@ -35,6 +36,7 @@ export function Provider({ children, ...props }: ThemeProviderProps) {
                 draggable={true}
                 pauseOnHover={false}
             />
+            <Toaster/>
             {startFetching && <ModelSpinner />}
             {children}
         </NextThemesProvider>

@@ -20,7 +20,7 @@ export default function LabelWithInput({
     ...props
 }:LabelWithInputProps) {
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
             <Label htmlFor="id1" className="text-left capitalize">{label}</Label>
             <Input
                 id="id1"
