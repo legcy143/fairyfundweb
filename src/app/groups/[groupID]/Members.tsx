@@ -16,6 +16,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import LableWithInput from "@/components/local/LableWithInput"
 import { MoreVertical } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default function Members({ members, isAdmin, groupID, isOwner }: any) {
   return (
@@ -40,7 +41,7 @@ export default function Members({ members, isAdmin, groupID, isOwner }: any) {
 }
 
 const Membercard = ({ name = "", bio = "", role = "member", credit = -1, isAdmin, memberID, groupID, isOwner }: any) => {
-  const { PromoteOrDemoteAsAdmin }: any = useGroup();
+  const { PromoteOrDemoteAsAdmin, RemoveMember }: any = useGroup();
   return (
     <div className='flex items-center justify-between p-3 border m-1 rounded border-border'>
       <p className='capitalize flex-1 truncate '>{name} {role == "admin" && <Badge variant="secondary">{role}</Badge>}</p>
@@ -49,7 +50,7 @@ const Membercard = ({ name = "", bio = "", role = "member", credit = -1, isAdmin
       {isAdmin &&
         <Sheet>
           <SheetTrigger className='bordered-varient'>
-              <MoreVertical />
+            <MoreVertical />
           </SheetTrigger>
           <SheetContent>
             {/* options */}
@@ -82,6 +83,14 @@ const Membercard = ({ name = "", bio = "", role = "member", credit = -1, isAdmin
                       Promote as admin
                     </ActionButton>
                 }
+                <ActionButton
+                className={"my-2"}
+                  disabled={!isOwner}
+                  onClick={() => {
+                    RemoveMember(memberID, groupID)
+                  }}>
+                 Kick from group
+                </ActionButton>
                 <AmountActionForm credit={credit} memberID={memberID} groupID={groupID} />
               </div>
             </>
@@ -96,7 +105,7 @@ const Membercard = ({ name = "", bio = "", role = "member", credit = -1, isAdmin
 
 const ActionButton = (props: any) => {
   return (
-    <SheetTrigger className='bordered-varient w-full' {...props}>{props.children}
+    <SheetTrigger  {...props} className={cn('bordered-varient w-full' , props.className)}>{props.children}
     </SheetTrigger>
   )
 }
@@ -112,11 +121,11 @@ const AmountActionForm = ({ credit = "", memberID, groupID }: any) => {
         type='number'
         value={amount}
         onChangeText={(e) => setamount(e)} />
-        <SheetTrigger className='justify-start bg-primary border border-input  hover:bg-primary hover:text-accent-foreground text-sm p-2 text-start rounded ml-auto'
-          onClick={() => {
-            ManageUserCredit(memberID, groupID, +amount)
-          }}>Update fund
-        </SheetTrigger>
+      <SheetTrigger className='justify-start bg-primary border border-input  hover:bg-primary hover:text-accent-foreground text-sm p-2 text-start rounded ml-auto'
+        onClick={() => {
+          ManageUserCredit(memberID, groupID, +amount)
+        }}>Update fund
+      </SheetTrigger>
     </div>
   )
 }

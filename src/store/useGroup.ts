@@ -252,6 +252,24 @@ export const useGroup = create((set: any) => ({
             })
         }
     },
+    RemoveMember: async (memberID: any, groupID: any) => {
+        try {
+            set({ isGroupLoading: true })
+            let res = await axios.post(`${API_URL}/group/removemember`, { memberID, groupID }, { headers });
+            // console.log(res)
+            if (res.data.success) {
+                await useGroup.getState().HandleChangeGroup(res?.data?.data);
+                toast.success(res?.data?.message || "something went wrong");
+            }
+        } catch (error:any) {
+            // console.log(error)
+            toast.error(error?.response?.data?.message)
+        } finally {
+            set({
+                isGroupLoading: false
+            })
+        }
+    },
     PromoteOrDemoteAsAdmin: async (memberID: any, groupID: any, isPromote: any = false) => {
         // console.log("promote as admin")
         try {
