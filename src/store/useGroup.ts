@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { API_URL } from "@/constants/API_URL";
 import axios from 'axios'
 import { toast } from "react-toastify";
+import { toast as toastUi } from "sonner"
 
 let authToken: string | null = '';
 if (typeof window !== 'undefined') {
@@ -21,31 +22,6 @@ export const useGroup = create((set: any) => ({
     myGroups: [],
     groupByID: {},
 
-    // local fetch and add it in object with user detail like is he is admin or not
-    // localFetchGroupByID: async (_id: string) => {
-    //     let arr: any = useGroup?.getState()?.myGroups;
-    //     let group: any = [];
-    //     if (arr.length == 0) {
-    //         try {
-    //             let res = await axios.get(`${API_URL}/group/fetchgroup/${_id}`, { headers });
-    //             if (res.data.success) {
-    //                 group = res.data.data;
-    //             }
-    //         } catch (e: any) {
-    //             toast.error(e.response.data.message)
-    //         }
-
-    //     } else {
-    //         group = arr?.filter((e: any) => {
-    //             return e = e?._id == _id
-    //         })?.[0]
-    //     }
-
-    //     set({
-    //         groupByID: {...group}
-    //     })
-    //     console.log("unknowen ",group)
-    // },
     localFetchGroupByID: async (_id: string) => {
         set({isGroupLoading:true})
         let arr: any = useGroup?.getState()?.myGroups;

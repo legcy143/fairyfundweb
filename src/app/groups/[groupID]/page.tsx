@@ -18,12 +18,13 @@ import Activity from './Activity';
 import { ActivityIcon, CheckSquare, LinkIcon, PackagePlusIcon, Settings, ShoppingBasketIcon, UserPlusIcon, UsersRoundIcon } from 'lucide-react';
 import Todo from './Todo';
 import ModelSpinner from '@/components/legcyUI/ModelSpinner';
+import { Button } from '@/components/ui/button';
 
 
 export default function page() {
     const { groupID }: any = useParams();
     let router = useRouter();
-    const { localFetchGroupByID, groupByID, isGroupLoading ,isStartLocalFetching}: any = useGroup()
+    const { localFetchGroupByID, groupByID, isGroupLoading ,isStartLocalFetching }: any = useGroup()
     const { isLogged, userDetail }: any = useAuth()
 
     useEffect(() => {
