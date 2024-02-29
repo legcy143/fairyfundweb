@@ -18,23 +18,40 @@ export const useGroup = create((set: any) => ({
     isGroupLoading: false,
     statusHandler: false,
     SendInviteResponse: {},
-    isStartLocalFetching :true,
+    isStartLocalFetching: true,
     myGroups: [],
     groupByID: {},
 
-    localFetchGroupByID: async (_id: string) => {
-        set({isGroupLoading:true})
-        let arr: any = useGroup?.getState()?.myGroups;
-        let group: any = [];
-
-        group = arr?.filter((e: any) => {
-            return e = e?._id == _id
-        })?.[0]
-
-        set({
-            groupByID: { ...group },
-            isGroupLoading:false
-        })
+    localFetchGroupByID: async (_id: string, userID: string) => {
+        try {
+            set({ isGroupLoading: true })
+            let arr: any = useGroup?.getState()?.myGroups;
+            let group: any = [];
+            group = arr?.filter((e: any) => {
+                return e = e?._id == _id
+            })?.[0]
+            let isAdmin: boolean = false;
+            let isOwner: boolean = false;
+            let myCredit: number = 0;
+            let userGroupDetail = group.users.map((user: any) => {
+                if (user?.memberID?._id == userID) {
+                    isAdmin = user?.role == 'admin';
+                    isOwner = userID == group?.groupOwner;
+                    myCredit = user?.credit;
+                    return { isAdmin, isOwner, myCredit }
+                }
+            })[0]
+            set({
+                groupByID: { ...group , ...userGroupDetail },
+            })
+        } catch (error) {
+            console.log('error in local fetch ' , error)
+        }
+        finally{
+            set({
+                isGroupLoading: false
+            })
+        }
     },
 
     // used when update many values at same time like adding product wehre update fund and items ass well
@@ -52,7 +69,7 @@ export const useGroup = create((set: any) => ({
     fetchMyGroups: async () => {
         try {
             set({
-                isStartLocalFetching:true,
+                isStartLocalFetching: true,
                 isGroupLoading: true,
             })
             let res: any = await axios.get(`${API_URL}/group/fetchmygroup`, { headers })
@@ -67,7 +84,7 @@ export const useGroup = create((set: any) => ({
         }
         finally {
             set({
-                isStartLocalFetching:false,
+                isStartLocalFetching: false,
                 isGroupLoading: false
             })
         }
@@ -237,7 +254,7 @@ export const useGroup = create((set: any) => ({
                 await useGroup.getState().HandleChangeGroup(res?.data?.data);
                 toast.success(res?.data?.message || "something went wrong");
             }
-        } catch (error:any) {
+        } catch (error: any) {
             // console.log(error)
             toast.error(error?.response?.data?.message)
         } finally {

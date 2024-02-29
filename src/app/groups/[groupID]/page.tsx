@@ -24,18 +24,18 @@ import { Button } from '@/components/ui/button';
 export default function page() {
     const { groupID }: any = useParams();
     let router = useRouter();
-    const { localFetchGroupByID, groupByID, isGroupLoading ,isStartLocalFetching }: any = useGroup()
+    const { localFetchGroupByID, groupByID, isGroupLoading ,isStartLocalFetching , myGroups}: any = useGroup()
     const { isLogged, userDetail }: any = useAuth()
 
     useEffect(() => {
         if (userDetail && !isStartLocalFetching) {
-            localFetchGroupByID(groupID as string);
+            localFetchGroupByID(groupID as string , userDetail?._id);
             console.log("fetching group by id ",groupByID)
         }
         return () => {
             console.log("return from group main page")
         }
-    }, [userDetail , isStartLocalFetching])
+    }, [userDetail , myGroups])
 
     if (!groupByID) {
         return <Error404 />
